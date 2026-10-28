@@ -1,12 +1,14 @@
-// Firebase Client & Sync Layer for project: paceai-4733a
+// Firebase Web Client for project: paceai-4733a
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { getFirestore, Firestore, collection, doc, setDoc, getDoc, getDocs, updateDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyDl5yIOwwIFUT1nufGKw5IyUi0q8bffh4I',
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || 'paceai-4733a.firebaseapp.com',
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'paceai-4733a',
-  authDomain: `${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'paceai-4733a'}.firebaseapp.com`,
-  storageBucket: `${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'paceai-4733a'}.appspot.com`,
-  appId: '1:paceai-4733a:web:slipeai',
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || 'paceai-4733a.firebasestorage.app',
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '478220186287',
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '1:478220186287:web:slipeai',
 };
 
 let app: FirebaseApp | undefined;
@@ -44,7 +46,6 @@ export async function syncBatchToFirebase(batch: any): Promise<boolean> {
     }, { merge: true });
     return true;
   } catch (error) {
-    // Non-blocking in case Firestore security rules restrict public writes
     console.warn('[Firebase Sync] Synced locally. Cloud sync pending auth:', error);
     return false;
   }
