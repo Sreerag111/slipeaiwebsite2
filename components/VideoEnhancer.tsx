@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from 'react';
 import Image from 'next/image';
-import { Video, Upload, Sparkles, Check, Lock, Zap, Film } from 'lucide-react';
+import { Video, Lock } from 'lucide-react';
 
 interface VideoEnhancerProps {
   onOpenPricing: () => void;
@@ -11,8 +11,6 @@ interface VideoEnhancerProps {
 export function VideoEnhancer({ onOpenPricing }: VideoEnhancerProps) {
   const [selectedCategory, setSelectedCategory] = useState('precision');
   const [videoFile, setVideoFile] = useState<File | null>(null);
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [progress, setProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const categories = [
@@ -21,6 +19,9 @@ export function VideoEnhancer({ onOpenPricing }: VideoEnhancerProps) {
     { id: 'slow_motion', label: 'Slow Motion', desc: 'Optical flow 60fps frame interpolation', file: 'slow_motion.webp' },
     { id: 'hdr', label: 'HDR Remaster', desc: 'Dynamic range & cinema tone mapping', file: 'hdr.webp' },
     { id: 'motion_deblur', label: 'Motion Deblur', desc: 'Reverse high-speed motion camera shake', file: 'motion_deblur.webp' },
+    { id: 'colorize', label: 'Colorize Videos', desc: 'Authentic archival historical film colorization', file: 'colorize.webp' },
+    { id: 'denoise', label: 'Denoise Video', desc: 'Low-light sensor noise & grain removal', file: 'denoise.webp' },
+    { id: 'creative', label: 'Creative Detail', desc: 'Cinematic neural texture & micro-detail', file: 'creative.webp' },
   ];
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,59 +41,58 @@ export function VideoEnhancer({ onOpenPricing }: VideoEnhancerProps) {
   };
 
   return (
-    <section id="video" className="py-16 md:py-24 border-t border-neutral-900 bg-black">
+    <section id="video" className="py-14 sm:py-20 md:py-28 border-t border-slate-200/80 bg-slate-50/70">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 space-y-3">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-950 text-[11px] font-bold text-neutral-300">
-            <Film className="h-3 w-3 text-white" />
-            <span>Pro Video Remastering</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
+        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight">
             AI Video Upscaling & Frame Interpolation
           </h2>
-          <p className="text-xs sm:text-sm text-neutral-400">
+          {/* Subheading: Semi Bold */}
+          <p className="text-xs sm:text-sm md:text-base text-slate-600 font-semibold px-2">
             Remaster vintage recordings, mobile clips, and drone footage to 60fps 4K clarity.
           </p>
         </div>
 
-        {/* Video Categories Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-10">
+        {/* Video Categories Grid: Substantially larger animated video cards (8 categories) */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4.5 mb-10 sm:mb-14">
           {categories.map((cat) => {
             const isSelected = selectedCategory === cat.id;
             return (
               <button
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
-                className={`relative flex flex-col items-center p-3 rounded-none border text-center transition-all group ${
+                className={`relative flex flex-col p-3 sm:p-3.5 rounded-2xl border transition-all duration-200 active:scale-[0.98] group ${
                   isSelected
-                    ? 'border-white bg-neutral-950 halo-shadow scale-[1.02]'
-                    : 'border-neutral-800 bg-neutral-950/60 hover:border-neutral-600'
+                    ? 'border-blue-600 bg-blue-50/40 text-blue-950 container-shade-md ring-2 ring-blue-500/20 scale-[1.02]'
+                    : 'border-slate-200/90 bg-white hover:border-slate-300 container-shade-sm hover:container-shade hover:-translate-y-0.5'
                 }`}
               >
-                <div className="relative w-14 h-14 rounded overflow-hidden border border-neutral-800 mb-2">
+                {/* Large prominent video preview for desktop & mobile */}
+                <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden border border-slate-100 mb-2.5 bg-slate-100 shadow-inner">
                   <Image
                     src={`/assets/videos/remaster_categories/${cat.file}`}
                     alt={cat.label}
                     fill
-                    className="object-cover"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-300"
                     unoptimized
                   />
                 </div>
-                <span className="text-xs font-black text-white leading-tight">{cat.label}</span>
-                <span className="text-[10px] text-neutral-500 mt-1 line-clamp-2 leading-tight">
-                  {cat.desc}
-                </span>
-                {isSelected && (
-                  <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-white shadow-[0_0_8px_white]" />
-                )}
+                <div className="w-full text-center space-y-0.5">
+                  <span className="text-xs sm:text-sm font-black text-slate-950 block leading-tight">{cat.label}</span>
+                  {/* Description: Semi Bold */}
+                  <span className="text-[10px] sm:text-[11px] text-slate-500 font-semibold block line-clamp-2 leading-tight">
+                    {cat.desc}
+                  </span>
+                </div>
               </button>
             );
           })}
         </div>
 
-        {/* Video Upload Dropzone */}
-        <div className="max-w-2xl mx-auto rounded-none border-2 border-white bg-neutral-950 p-6 sm:p-10 halo-shadow text-center space-y-6">
+        {/* Video Upload Dropzone: Increased Size (max-w-4xl) */}
+        <div className="max-w-4xl mx-auto rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-10 md:p-12 container-shade-xl text-center space-y-5 sm:space-y-7">
           <input
             ref={fileInputRef}
             type="file"
@@ -103,28 +103,30 @@ export function VideoEnhancer({ onOpenPricing }: VideoEnhancerProps) {
 
           <div
             onClick={() => fileInputRef.current?.click()}
-            className="border-2 border-dashed border-neutral-800 hover:border-white p-8 rounded-none cursor-pointer transition-colors bg-black flex flex-col items-center justify-center space-y-3"
+            className="border-2 border-dashed border-slate-200 hover:border-blue-600 p-8 sm:p-12 rounded-3xl cursor-pointer transition-colors bg-slate-50/70 hover:bg-blue-50/20 flex flex-col items-center justify-center space-y-3.5"
           >
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-neutral-900 border border-neutral-700 text-white">
-              <Video className="h-5 w-5 text-white" />
+            <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-white border border-slate-200 text-blue-600 shadow-md">
+              <Video className="h-6 w-6 sm:h-7 sm:w-7 text-blue-600" />
             </div>
             <div>
-              <p className="text-sm font-bold text-white">
+              <p className="text-sm sm:text-base font-bold text-slate-900">
                 {videoFile ? videoFile.name : 'Click to select MP4 Video'}
               </p>
-              <p className="text-xs text-neutral-500 mt-0.5">MP4 format up to 75 MB</p>
+              {/* Description: Semi Bold */}
+              <p className="text-xs sm:text-sm text-slate-500 font-semibold mt-1">MP4 format up to 75 MB</p>
             </div>
           </div>
 
-          <div className="space-y-3 pt-2">
+          <div className="space-y-3 pt-1">
             <button
               onClick={handleStartRemaster}
-              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-none bg-white text-black font-black text-sm uppercase tracking-wider hover:bg-neutral-200 transition-all shadow-xl halo-shadow"
+              className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-slate-950 text-white font-black text-xs sm:text-sm uppercase tracking-wider hover:bg-slate-800 transition-all shadow-xl container-shade active:scale-98"
             >
               <Lock className="h-4 w-4" />
               <span>Unlock Video Remaster with Pro</span>
             </button>
-            <p className="text-xs text-neutral-500">
+            {/* Note: Semi Bold */}
+            <p className="text-xs sm:text-sm text-slate-500 font-semibold">
               Video Remastering utilizes dedicated cloud GPU nodes. Included with Slipe AI Pro.
             </p>
           </div>

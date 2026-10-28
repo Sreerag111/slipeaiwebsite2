@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     type: 'website',
   },
   icons: {
-    icon: '/assets/icons/app_icon.png',
+    icon: '/slipe-logo.png',
   },
 };
 
@@ -44,12 +44,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="light">
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body className="min-h-screen bg-black text-white antialiased selection:bg-white selection:text-black">
+      <body className="min-h-screen bg-[#F8FAFC] text-slate-900 antialiased selection:bg-slate-900 selection:text-white">
         {children}
         {/* Razorpay Checkout Script */}
         <Script

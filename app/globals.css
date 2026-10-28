@@ -10,36 +10,72 @@
 
 body {
   font-family: var(--font-montserrat);
-  background-color: #000000;
-  color: #ffffff;
+  background-color: #F8FAFC;
+  color: #0F172A;
   overflow-x: hidden;
 }
 
-/* Omni-directional halo shadows */
+/* Light Theme Container Shade Utilities */
+.container-shade {
+  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.07), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
+}
+
+.container-shade-lg {
+  box-shadow: 0 20px 45px -8px rgba(0, 0, 0, 0.09), 0 8px 20px -4px rgba(0, 0, 0, 0.04);
+}
+
+.container-shade-xl {
+  box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.12), 0 10px 24px -4px rgba(0, 0, 0, 0.05);
+}
+
+.container-shade-active {
+  box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.12), 0 6px 16px -2px rgba(0, 0, 0, 0.06);
+}
+
+.container-shade-sm {
+  box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.04), 0 1px 4px -1px rgba(0, 0, 0, 0.02);
+}
+
+/* Backward compatibility for halo-shadow references */
 .halo-shadow {
-  box-shadow: 0 0 16px rgba(255, 255, 255, 0.14);
+  box-shadow: 0 10px 30px -4px rgba(0, 0, 0, 0.07), 0 4px 12px -2px rgba(0, 0, 0, 0.03);
 }
 
 .halo-shadow-active {
-  box-shadow: 0 0 24px rgba(255, 255, 255, 0.28);
+  box-shadow: 0 20px 45px -8px rgba(0, 0, 0, 0.12), 0 8px 20px -4px rgba(0, 0, 0, 0.06);
 }
 
 .halo-shadow-sm {
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.10);
+  box-shadow: 0 2px 8px -1px rgba(0, 0, 0, 0.04), 0 1px 4px -1px rgba(0, 0, 0, 0.02);
 }
 
-/* Custom scrollbars */
+/* Custom scrollbars for light theme */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0a0c;
+  background: #F1F5F9;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2a2a30;
+  background: #CBD5E1;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #444450;
+  background: #94A3B8;
 }
+
+/* Shimmer Animation */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite linear;
+}
+

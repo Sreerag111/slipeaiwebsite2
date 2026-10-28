@@ -60,12 +60,14 @@ const config: Config = {
         ]
       },
       boxShadow: {
-        'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.08)',
-        'enterprise': '0 10px 30px -10px rgba(0, 0, 0, 0.12), 0 0 1px 1px rgba(0, 0, 0, 0.05)',
-        'blue-sm': '0 0 15px -3px rgba(37, 99, 235, 0.25)',
-        'container-shade': '0 10px 25px -4px rgba(0, 0, 0, 0.08), 0 4px 10px -2px rgba(0, 0, 0, 0.04)',
-        'container-shade-hover': '0 20px 35px -4px rgba(0, 0, 0, 0.12), 0 8px 16px -3px rgba(0, 0, 0, 0.06)',
-        'hero-shade': '0 14px 34px -4px rgba(0, 0, 0, 0.09), 0 6px 14px -2px rgba(0, 0, 0, 0.04)',
+        'subtle': '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        'shade-sm': '0 2px 8px -1px rgba(0, 0, 0, 0.04), 0 1px 4px -1px rgba(0, 0, 0, 0.02)',
+        'shade-md': '0 8px 24px -4px rgba(0, 0, 0, 0.06), 0 3px 8px -2px rgba(0, 0, 0, 0.03)',
+        'shade-lg': '0 16px 36px -6px rgba(0, 0, 0, 0.08), 0 6px 16px -3px rgba(0, 0, 0, 0.04)',
+        'shade-xl': '0 24px 50px -10px rgba(0, 0, 0, 0.10), 0 10px 24px -4px rgba(0, 0, 0, 0.05)',
+        'container-shade': '0 10px 30px -4px rgba(0, 0, 0, 0.07), 0 4px 12px -2px rgba(0, 0, 0, 0.03)',
+        'container-shade-hover': '0 20px 40px -4px rgba(0, 0, 0, 0.10), 0 8px 18px -3px rgba(0, 0, 0, 0.05)',
+        'hero-shade': '0 20px 50px -10px rgba(0, 0, 0, 0.08), 0 8px 25px -5px rgba(0, 0, 0, 0.04)',
       }
     },
   },
