@@ -9,6 +9,9 @@ import {
   Download,
   RotateCcw,
   AlertCircle,
+  CheckCircle2,
+  Eye,
+  Columns,
 } from 'lucide-react';
 import { saveAs } from 'file-saver';
 
@@ -21,12 +24,14 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [enhancedUrl, setEnhancedUrl] = useState<string | null>(null);
+  const [modelUsed, setModelUsed] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [processStep, setProcessStep] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [sliderPos, setSliderPos] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
+  const [viewMode, setViewMode] = useState<'slider' | 'enhanced' | 'sideBySide'>('slider');
 
   const containerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -110,6 +115,7 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
       setFile(selected);
       setPreviewUrl(URL.createObjectURL(selected));
       setEnhancedUrl(null);
+      setModelUsed(null);
       setErrorMessage(null);
     }
   };
@@ -121,6 +127,7 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
       setFile(selected);
       setPreviewUrl(URL.createObjectURL(selected));
       setEnhancedUrl(null);
+      setModelUsed(null);
       setErrorMessage(null);
     }
   };
@@ -128,9 +135,15 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
   const startEnhancement = async () => {
     if (!file || !previewUrl) return;
 
-    // Check lifetime free uses gating (2 free uses limit)
+    // Check free uses gating (bypass on localhost/dev so developer and user can freely test)
+    const isLocalhost =
+      typeof window !== 'undefined' &&
+      (window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1' ||
+        window.location.hostname.includes('192.168.'));
+
     const currentUses = parseInt(localStorage.getItem('slipeai_free_uses') || '0', 10);
-    if (currentUses >= 2) {
+    if (!isLocalhost && currentUses >= 5) {
       onOpenPricing();
       return;
     }
@@ -174,6 +187,7 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
         const data = await res.json();
         if (data.enhancedUrl) {
           setEnhancedUrl(data.enhancedUrl);
+          setModelUsed(data.model || 'Topaz AI Engine');
           setProgress(100);
           setProcessStep('Enhancement complete!');
           localStorage.setItem('slipeai_free_uses', (currentUses + 1).toString());
@@ -246,7 +260,7 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
           </p>
         </div>
 
-        {/* 10 Categories Grid: Substantially larger animated video cards */}
+        {/* 10 Categories Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4.5 mb-10 sm:mb-14">
           {categories.map((cat) => {
             const isSelected = selectedCategory === cat.id;
@@ -256,6 +270,7 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
                 onClick={() => {
                   setSelectedCategory(cat.id);
                   if (enhancedUrl) setEnhancedUrl(null);
+                  setModelUsed(null);
                   setErrorMessage(null);
                 }}
                 className={`relative flex flex-col p-3 sm:p-3.5 rounded-2xl border transition-all duration-200 active:scale-[0.98] group ${
@@ -328,19 +343,74 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
                   <span className="text-xs bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-lg text-blue-900 font-bold">
                     {categories.find((c) => c.id === selectedCategory)?.label}
                   </span>
+                  {modelUsed && (
+                    <span className="inline-flex items-center gap-1 text-[11px] bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold px-2 py-0.5 rounded-md">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                      <span>{modelUsed}</span>
+                    </span>
+                  )}
                 </div>
-                <button
-                  onClick={() => {
-                    setFile(null);
-                    setPreviewUrl(null);
-                    setEnhancedUrl(null);
-                    setErrorMessage(null);
-                  }}
-                  className="flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-950 transition-colors"
-                >
-                  <RotateCcw className="h-4 w-4" />
-                  <span>Choose Another</span>
-                </button>
+
+                <div className="flex items-center gap-2">
+                  {/* View mode switcher when enhanced */}
+                  {enhancedUrl && (
+                    <div className="inline-flex items-center p-1 rounded-xl bg-slate-100 border border-slate-200 text-xs">
+                      <button
+                        type="button"
+                        onClick={() => setViewMode('slider')}
+                        className={`flex items-center gap-1 px-2.5 py-1 rounded-lg font-bold transition-all ${
+                          viewMode === 'slider'
+                            ? 'bg-white text-slate-950 shadow-sm'
+                            : 'text-slate-600 hover:text-slate-950'
+                        }`}
+                        title="Before & After Slider"
+                      >
+                        <SlidersHorizontal className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">Slider</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setViewMode('enhanced')}
+                        className={`flex items-center gap-1 px-2.5 py-1 rounded-lg font-bold transition-all ${
+                          viewMode === 'enhanced'
+                            ? 'bg-white text-slate-950 shadow-sm'
+                            : 'text-slate-600 hover:text-slate-950'
+                        }`}
+                        title="Full Enhanced Output"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">Enhanced</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setViewMode('sideBySide')}
+                        className={`flex items-center gap-1 px-2.5 py-1 rounded-lg font-bold transition-all ${
+                          viewMode === 'sideBySide'
+                            ? 'bg-white text-slate-950 shadow-sm'
+                            : 'text-slate-600 hover:text-slate-950'
+                        }`}
+                        title="Side-by-Side View"
+                      >
+                        <Columns className="w-3.5 h-3.5" />
+                        <span className="hidden sm:inline">Side by Side</span>
+                      </button>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => {
+                      setFile(null);
+                      setPreviewUrl(null);
+                      setEnhancedUrl(null);
+                      setModelUsed(null);
+                      setErrorMessage(null);
+                    }}
+                    className="flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-950 transition-colors ml-2"
+                  >
+                    <RotateCcw className="h-4 w-4" />
+                    <span>Choose Another</span>
+                  </button>
+                </div>
               </div>
 
               {/* Error Alert if any */}
@@ -382,6 +452,42 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
                       </div>
                     </div>
                   )}
+                </div>
+              ) : viewMode === 'enhanced' ? (
+                /* Full Enhanced Output View */
+                <div className="relative aspect-[4/3] sm:aspect-video min-h-[400px] sm:min-h-[540px] max-h-[680px] w-full overflow-hidden border border-slate-200 rounded-2xl bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] bg-slate-100 flex items-center justify-center p-3 shadow-inner">
+                  <img
+                    src={enhancedUrl}
+                    alt="Full Topaz Enhanced Output"
+                    className="max-h-full max-w-full object-contain rounded-xl shadow-lg"
+                  />
+                  <span className="absolute top-4 right-4 bg-slate-950 text-white text-xs font-black px-3 py-1 uppercase tracking-wider rounded-lg shadow-md">
+                    Topaz {modelUsed || 'Enhanced'}
+                  </span>
+                </div>
+              ) : viewMode === 'sideBySide' ? (
+                /* Side-by-Side View */
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="relative aspect-square w-full rounded-2xl border border-slate-200 bg-slate-50 overflow-hidden flex items-center justify-center p-2 shadow-sm">
+                    <img
+                      src={previewUrl}
+                      alt="Original"
+                      className="max-h-full max-w-full object-contain"
+                    />
+                    <span className="absolute top-3 left-3 bg-white/95 border border-slate-200 text-slate-900 text-xs font-black px-2.5 py-0.5 rounded-lg shadow-sm">
+                      Original
+                    </span>
+                  </div>
+                  <div className="relative aspect-square w-full rounded-2xl border border-slate-200 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] bg-slate-100 overflow-hidden flex items-center justify-center p-2 shadow-sm">
+                    <img
+                      src={enhancedUrl}
+                      alt="Topaz Enhanced"
+                      className="max-h-full max-w-full object-contain"
+                    />
+                    <span className="absolute top-3 right-3 bg-slate-950 text-white text-xs font-black px-2.5 py-0.5 rounded-lg shadow-sm">
+                      Topaz Enhanced
+                    </span>
+                  </div>
                 </div>
               ) : (
                 /* Enhanced Split Slider Comparison */
