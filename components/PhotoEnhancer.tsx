@@ -8,6 +8,7 @@ import {
   SlidersHorizontal,
   Download,
   RotateCcw,
+  AlertCircle,
 } from 'lucide-react';
 import { saveAs } from 'file-saver';
 
@@ -23,6 +24,7 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [processStep, setProcessStep] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [sliderPos, setSliderPos] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -33,62 +35,72 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
     {
       id: 'enhance_photos_quality',
       label: 'Enhance Quality',
-      desc: 'AI super-resolution & facial details',
+      desc: 'Topaz High Fidelity AI super-resolution & facial details',
       file: 'enhance_photos_quality.webp',
+      stepText: 'Applying Topaz High Fidelity super-resolution...',
     },
     {
       id: 'cleanup_photos',
       label: 'Clean Up Photos',
-      desc: 'Remove sensor dust, scratches & spots',
+      desc: 'Topaz Denoise Max context noise & sensor dust reduction',
       file: 'cleanup_photos.webp',
+      stepText: 'Running Topaz Denoise Max context reconstruction...',
     },
     {
       id: 'bw_to_color',
       label: 'B&W to Color',
-      desc: 'Authentic archival skin & colorization',
+      desc: 'Topaz Wonder 3.5 authentic archival skin & colorization',
       file: 'bw_to_color.webp',
+      stepText: 'Synthesizing authentic archival skin tones & natural color...',
     },
     {
       id: 'fix_lighting',
       label: 'Fix Lighting',
-      desc: 'Dynamic exposure & shadow recovery',
+      desc: 'Topaz Adjust V2 dynamic exposure & shadow recovery',
       file: 'fix_lighting.webp',
+      stepText: 'Calibrating exposure, highlight dynamic range & shadows...',
     },
     {
       id: 'fix_dust_and_scratches',
       label: 'Dust & Scratches',
-      desc: 'Repair vintage creases & sensor dust',
+      desc: 'Topaz Extreme repair for vintage creases & damage',
       file: 'fix_dust_and_scratches.webp',
+      stepText: 'Removing deep scratches, creases & paper tears...',
     },
     {
       id: 'refine_photos',
       label: 'Refine Photos',
-      desc: 'Micro-texture & portrait refinement',
+      desc: 'Topaz micro-texture & portrait facial refinement',
       file: 'refine_photos.webp',
+      stepText: 'Reconstructing micro-textures & high-fidelity portrait detail...',
     },
     {
       id: 'sharp_photos',
       label: 'Sharp Photos',
-      desc: 'Clear blur & crisp edge definition',
+      desc: 'Topaz Strong camera shake & optical lens deblur',
       file: 'sharp_photos.webp',
+      stepText: 'Synthesizing Topaz AI optical & motion deblur...',
     },
     {
       id: 'balance_colour',
       label: 'Balance Colour',
-      desc: 'Calibrate tone & color temperature',
+      desc: 'Topaz Adjust tone, white balance & color temperature',
       file: 'balance_colour.webp',
+      stepText: 'Calibrating tone, contrast, and color temperature...',
     },
     {
       id: 'upscale_photos',
       label: 'Upscale 4K',
-      desc: 'Ultra HD 4K lossless super-resolution',
+      desc: 'Topaz Standard V2 Ultra HD 4K lossless enlargement',
       file: 'upscale_photos.webp',
+      stepText: 'Executing Topaz 4K Ultra-HD super-resolution upscale...',
     },
     {
       id: 'remove_background',
       label: 'Cutout BG',
-      desc: 'Studio alpha cutout for portraits',
+      desc: 'Topaz Object sub-pixel alpha matting for transparent portraits',
       file: 'remove_background.webp',
+      stepText: 'Isolating subject with Topaz sub-pixel alpha matting...',
     },
   ];
 
@@ -98,6 +110,7 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
       setFile(selected);
       setPreviewUrl(URL.createObjectURL(selected));
       setEnhancedUrl(null);
+      setErrorMessage(null);
     }
   };
 
@@ -108,6 +121,7 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
       setFile(selected);
       setPreviewUrl(URL.createObjectURL(selected));
       setEnhancedUrl(null);
+      setErrorMessage(null);
     }
   };
 
@@ -121,26 +135,28 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
       return;
     }
 
+    const currentCatObj = categories.find((c) => c.id === selectedCategory);
     setIsProcessing(true);
-    setProgress(5);
-    setProcessStep('Connecting to neural inference pipeline...');
+    setErrorMessage(null);
+    setProgress(10);
+    setProcessStep('Connecting to Topaz Labs AI inference engine...');
+
+    const timer1 = setTimeout(() => {
+      setProgress(35);
+      setProcessStep(currentCatObj?.stepText || 'Analyzing image pixels & facial landmarks...');
+    }, 800);
+
+    const timer2 = setTimeout(() => {
+      setProgress(65);
+      setProcessStep('Synthesizing high-frequency neural features...');
+    }, 2400);
+
+    const timer3 = setTimeout(() => {
+      setProgress(85);
+      setProcessStep('Finalizing lossless image reconstruction...');
+    }, 4500);
 
     try {
-      setTimeout(() => {
-        setProgress(25);
-        setProcessStep('Analyzing facial landmarks and sensor profile...');
-      }, 700);
-
-      setTimeout(() => {
-        setProgress(55);
-        setProcessStep('Synthesizing high-frequency micro-textures...');
-      }, 1600);
-
-      setTimeout(() => {
-        setProgress(85);
-        setProcessStep('Color balancing and dynamic range reconstruction...');
-      }, 2600);
-
       const formData = new FormData();
       formData.append('image', file);
       formData.append('category', selectedCategory);
@@ -150,24 +166,32 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
         body: formData,
       });
 
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+
       if (res.ok) {
         const data = await res.json();
         if (data.enhancedUrl) {
           setEnhancedUrl(data.enhancedUrl);
+          setProgress(100);
+          setProcessStep('Enhancement complete!');
+          localStorage.setItem('slipeai_free_uses', (currentUses + 1).toString());
         } else {
-          setEnhancedUrl(previewUrl);
+          setErrorMessage('Failed to retrieve enhanced image from Topaz engine.');
         }
       } else {
-        setEnhancedUrl(previewUrl);
+        const errJson = await res.json().catch(() => ({}));
+        setErrorMessage(
+          errJson.error || 'Topaz engine encountered an error while enhancing this photo. Please try again.'
+        );
       }
-
-      setProgress(100);
-      setProcessStep('Enhancement complete!');
-      localStorage.setItem('slipeai_free_uses', (currentUses + 1).toString());
-    } catch (err) {
-      console.warn('Backend inference fallback active:', err);
-      setEnhancedUrl(previewUrl);
-      setProgress(100);
+    } catch (err: any) {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+      console.error('Enhancement error:', err);
+      setErrorMessage(err?.message || 'Network error communicating with enhancement engine.');
     } finally {
       setIsProcessing(false);
     }
@@ -203,21 +227,22 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
 
   const handleDownload = () => {
     if (enhancedUrl) {
-      saveAs(enhancedUrl, `slipeai_enhanced_${Date.now()}.jpg`);
+      const isPng = selectedCategory === 'remove_background' || enhancedUrl.startsWith('data:image/png');
+      const ext = isPng ? 'png' : 'jpg';
+      saveAs(enhancedUrl, `slipeai_${selectedCategory}_${Date.now()}.${ext}`);
     }
   };
 
   return (
     <section id="enhancer" className="py-14 sm:py-20 md:py-28 border-t border-slate-200/80 bg-[#F8FAFC]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section Header without pill badge */}
+        {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3">
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight">
             Select Your Enhancement Category
           </h2>
-          {/* Subheading: Semi Bold */}
           <p className="text-xs sm:text-sm md:text-base text-slate-600 font-semibold px-2">
-            Choose a specialized AI model tailored to your photo's specific restoration needs.
+            Choose an official Topaz Labs AI model tailored to your photo's specific restoration needs.
           </p>
         </div>
 
@@ -228,14 +253,18 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
             return (
               <button
                 key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
+                onClick={() => {
+                  setSelectedCategory(cat.id);
+                  if (enhancedUrl) setEnhancedUrl(null);
+                  setErrorMessage(null);
+                }}
                 className={`relative flex flex-col p-3 sm:p-3.5 rounded-2xl border transition-all duration-200 active:scale-[0.98] group ${
                   isSelected
                     ? 'border-blue-600 bg-blue-50/40 text-blue-950 container-shade-md ring-2 ring-blue-500/20 scale-[1.02]'
                     : 'border-slate-200/90 bg-white hover:border-slate-300 container-shade-sm hover:container-shade hover:-translate-y-0.5'
                 }`}
               >
-                {/* Large prominent video preview for desktop & mobile */}
+                {/* Large prominent preview */}
                 <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden border border-slate-100 mb-2.5 bg-slate-100 shadow-inner">
                   <Image
                     src={`/assets/videos/enhance_categories/${cat.file}`}
@@ -248,7 +277,6 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
                 </div>
                 <div className="w-full text-center space-y-0.5">
                   <span className="text-xs sm:text-sm font-black text-slate-950 block leading-tight">{cat.label}</span>
-                  {/* Description: Semi Bold */}
                   <span className="text-[10px] sm:text-[11px] text-slate-500 font-semibold block line-clamp-2 leading-tight">
                     {cat.desc}
                   </span>
@@ -258,10 +286,10 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
           })}
         </div>
 
-        {/* Upload & Workspace Area: Increased Container Size (max-w-6xl) */}
+        {/* Upload & Workspace Area */}
         <div className="max-w-6xl mx-auto rounded-3xl border border-slate-200/90 bg-white p-5 sm:p-8 md:p-10 container-shade-xl">
           {!previewUrl ? (
-            /* Dropzone without 2 free lifetime enhancements badge */
+            /* Dropzone */
             <div
               onDragOver={(e) => e.preventDefault()}
               onDrop={handleDrop}
@@ -282,7 +310,6 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
                 <p className="text-sm sm:text-lg font-bold text-slate-900">
                   Drag and drop your photo here, or <span className="underline text-blue-600 font-black">browse files</span>
                 </p>
-                {/* Subtext: Semi Bold */}
                 <p className="text-xs sm:text-sm text-slate-500 font-semibold">
                   Supports JPEG, PNG, and WebP (up to 15 MB)
                 </p>
@@ -307,6 +334,7 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
                     setFile(null);
                     setPreviewUrl(null);
                     setEnhancedUrl(null);
+                    setErrorMessage(null);
                   }}
                   className="flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-slate-500 hover:text-slate-950 transition-colors"
                 >
@@ -314,6 +342,17 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
                   <span>Choose Another</span>
                 </button>
               </div>
+
+              {/* Error Alert if any */}
+              {errorMessage && (
+                <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-900 flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+                  <div className="text-xs sm:text-sm">
+                    <p className="font-bold">Enhancement Error</p>
+                    <p className="text-rose-700 mt-0.5">{errorMessage}</p>
+                  </div>
+                </div>
+              )}
 
               {/* Viewer: Large & prominent */}
               {!enhancedUrl ? (
@@ -352,29 +391,29 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
                     onPointerDown={handlePointerDown}
                     onPointerUp={handlePointerUp}
                     onPointerMove={handlePointerMove}
-                    className="relative aspect-[4/3] sm:aspect-video min-h-[400px] sm:min-h-[540px] max-h-[680px] w-full select-none overflow-hidden cursor-ew-resize border border-slate-200 rounded-2xl bg-slate-100 touch-none shadow-inner"
+                    className="relative aspect-[4/3] sm:aspect-video min-h-[400px] sm:min-h-[540px] max-h-[680px] w-full select-none overflow-hidden cursor-ew-resize border border-slate-200 rounded-2xl bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] bg-slate-100 touch-none shadow-inner"
                   >
                     {/* Enhanced layer */}
-                    <div className="absolute inset-0">
+                    <div className="absolute inset-0 flex items-center justify-center">
                       <img
                         src={enhancedUrl}
                         alt="Enhanced Result"
                         className="w-full h-full object-contain"
                       />
                       <span className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-slate-950 text-white text-[10px] sm:text-xs font-black px-2.5 py-1 uppercase tracking-wider rounded-lg shadow-md">
-                        Enhanced
+                        Topaz Enhanced
                       </span>
                     </div>
 
                     {/* Original layer */}
                     <div
-                      className="absolute inset-0 overflow-hidden"
+                      className="absolute inset-0 overflow-hidden flex items-center justify-center"
                       style={{ clipPath: `polygon(0 0, ${sliderPos}% 0, ${sliderPos}% 100%, 0 100%)` }}
                     >
                       <img
                         src={previewUrl}
                         alt="Original Photo"
-                        className="w-full h-full object-contain filter contrast-[0.9] blur-[0.3px]"
+                        className="w-full h-full object-contain"
                       />
                       <span className="absolute top-3 left-3 sm:top-4 sm:left-4 bg-white/95 border border-slate-200 text-slate-900 text-[10px] sm:text-xs font-black px-2.5 py-1 uppercase tracking-wider rounded-lg shadow-md">
                         Original
@@ -391,9 +430,9 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
                       </div>
                     </div>
                   </div>
-                  {/* Instructions: Semi Bold */}
+                  {/* Instructions */}
                   <p className="text-center text-xs sm:text-sm font-semibold text-slate-500">
-                    Drag the center handle horizontally to compare before vs after enhancement
+                    Drag the center handle horizontally to compare original vs Topaz AI enhanced output
                   </p>
                 </div>
               )}
@@ -407,7 +446,7 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
                     className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2.5 py-4 px-8 rounded-2xl bg-slate-950 text-white font-black text-xs sm:text-sm uppercase tracking-wider hover:bg-slate-800 transition-all shadow-xl container-shade disabled:opacity-50 active:scale-98"
                   >
                     <Sparkles className="h-4 w-4" />
-                    <span>{isProcessing ? 'Processing...' : 'Run AI Enhancement'}</span>
+                    <span>{isProcessing ? 'Processing with Topaz AI...' : 'Run Topaz AI Enhancement'}</span>
                   </button>
                 ) : (
                   <>
@@ -416,7 +455,7 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
                       className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2.5 py-4 px-8 rounded-2xl bg-slate-950 text-white font-black text-xs sm:text-sm uppercase tracking-wider hover:bg-slate-800 transition-all shadow-xl container-shade active:scale-98"
                     >
                       <Download className="h-4 w-4" />
-                      <span>Download HD Enhanced Image</span>
+                      <span>Download Topaz HD Enhanced Image</span>
                     </button>
                     <button
                       onClick={onOpenPricing}
