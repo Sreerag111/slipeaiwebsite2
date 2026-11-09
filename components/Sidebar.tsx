@@ -14,6 +14,7 @@ import {
   Search,
   PanelLeftClose,
 } from 'lucide-react';
+import { AboutModal } from '@/components/AboutModal';
 
 interface SidebarProps {
   isOpen: boolean;
@@ -35,6 +36,7 @@ export function Sidebar({
   onSelectSection,
 }: SidebarProps) {
   const [freeUses, setFreeUses] = useState(0);
+  const [isAboutOpen, setIsAboutOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -105,7 +107,7 @@ export function Sidebar({
             <button
               type="button"
               onClick={() => handleNavClick('create')}
-              className="flex items-center gap-2 group text-left"
+              className="flex items-center gap-2 group text-left cursor-pointer"
             >
               <span className="text-2xl font-black tracking-tight text-slate-950 group-hover:text-slate-700 transition-colors">
                 SlipeAI
@@ -148,7 +150,7 @@ export function Sidebar({
             </div>
           </div>
 
-          {/* New Creation Action Button (matches 'New Chat' button from reference image) */}
+          {/* New Creation Action Button */}
           <button
             type="button"
             onClick={() => {
@@ -199,7 +201,7 @@ export function Sidebar({
                 onClose();
                 onOpenPricing();
               }}
-              className="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-950 hover:bg-slate-100/80 transition-colors text-left"
+              className="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-950 hover:bg-slate-100/80 transition-colors text-left cursor-pointer"
             >
               <CreditCard className="w-4 h-4 text-slate-400" />
               <span>Web Pricing Plans</span>
@@ -217,7 +219,7 @@ export function Sidebar({
           </div>
         </div>
 
-        {/* Bottom Area: Plan Card & Profile (Matches reference screenshot) */}
+        {/* Bottom Area: Plan Card & Profile (With About Section on Arrow Click) */}
         <div className="p-4 sm:p-5 space-y-3 border-t border-slate-100 font-display">
           {/* Plan Status Card */}
           <div className="rounded-2xl border border-slate-200/90 bg-[#F8FAFC] p-3.5 shadow-2xs space-y-2.5">
@@ -236,17 +238,20 @@ export function Sidebar({
                 onClose();
                 onOpenPricing();
               }}
-              className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-slate-950 text-white font-black text-xs uppercase tracking-wider hover:bg-slate-800 transition-all shadow-sm active:scale-95"
+              className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-slate-950 text-white font-black text-xs uppercase tracking-wider hover:bg-slate-800 transition-all shadow-sm active:scale-95 cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>Upgrade Now</span>
             </button>
           </div>
 
-          {/* User Profile Pill Row */}
-          <div
-            onClick={onOpenPricing}
-            className="flex items-center justify-between p-2 rounded-2xl hover:bg-slate-100/80 transition-colors cursor-pointer group"
+          {/* User Profile Pill Row: Opens the About section when Sreerag Jotish / arrow is clicked */}
+          <button
+            type="button"
+            onClick={() => setIsAboutOpen(true)}
+            className="w-full flex items-center justify-between p-2 rounded-2xl hover:bg-slate-100/80 transition-colors cursor-pointer group text-left"
+            title="About SlipeAI & Account Details"
+            aria-label="About SlipeAI and Account Details"
           >
             <div className="flex items-center gap-2.5 min-w-0">
               <div className="w-8 h-8 rounded-full bg-emerald-600 text-white font-black text-xs flex items-center justify-center shadow-xs shrink-0">
@@ -261,9 +266,16 @@ export function Sidebar({
             </div>
 
             <ChevronUp className="w-4 h-4 text-slate-400 group-hover:text-slate-700 transition-colors shrink-0" />
-          </div>
+          </button>
         </div>
       </aside>
+
+      {/* About Section Modal */}
+      <AboutModal
+        isOpen={isAboutOpen}
+        onClose={() => setIsAboutOpen(false)}
+        onOpenPricing={onOpenPricing}
+      />
     </>
   );
 }
