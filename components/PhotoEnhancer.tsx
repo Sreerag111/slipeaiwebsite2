@@ -443,7 +443,7 @@ export function PhotoEnhancer({ onOpenPricing, initialCategory }: PhotoEnhancerP
                   Drag and drop your photo here, or <span className="underline text-blue-600 font-black hover:text-blue-700 transition-colors">browse files</span>
                 </p>
                 <p className="text-xs sm:text-sm text-slate-500 font-semibold">
-                  Supports JPEG, PNG, and WebP (up to 15 MB) &bull; Processed with SlipeAI
+                  Supports JPEG, PNG, and WebP (up to 15 MB)
                 </p>
               </div>
 
