@@ -245,41 +245,6 @@ export function VideoEnhancer({ onOpenPricing, initialCategory }: VideoEnhancerP
           ref={studioRef}
           className="rounded-[28px] sm:rounded-[36px] border border-slate-200/90 bg-white p-5 sm:p-8 md:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.06)] space-y-6"
         >
-          {/* Active Category Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100 font-display">
-            <div className="space-y-1">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-900 text-xs font-bold">
-                <span>Active Remaster Mode</span>
-                <span className="font-extrabold">&bull;</span>
-                <span>{activeCategory.label}</span>
-              </div>
-              <h3 className="text-xl sm:text-2xl font-black text-slate-950 tracking-tight">
-                Remaster Footage with {activeCategory.label}
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 font-medium">
-                {activeCategory.desc}
-              </p>
-            </div>
-
-            {/* Quick Category Selector Pills */}
-            <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-1">
-              {VIDEO_CATEGORIES.slice(0, 4).map((cat) => (
-                <button
-                  key={cat.id}
-                  type="button"
-                  onClick={() => handleSelectCategory(cat.id)}
-                  className={`px-2.5 py-1 rounded-lg text-[11px] font-bold whitespace-nowrap transition-all ${
-                    selectedCategory === cat.id
-                      ? 'bg-slate-950 text-white shadow-xs'
-                      : 'bg-slate-100 text-slate-600 hover:text-slate-950 hover:bg-slate-200'
-                  }`}
-                >
-                  {cat.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
           {!videoUrl ? (
             /* Upload Dropzone */
             <div

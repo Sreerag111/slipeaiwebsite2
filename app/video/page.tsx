@@ -3,7 +3,6 @@
 import React, { Suspense, useState } from 'react';
 import { Sidebar } from '@/components/Sidebar';
 import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
 import { PaywallModal } from '@/components/PaywallModal';
 import { VideoEnhancer } from '@/components/VideoEnhancer';
 
@@ -53,9 +52,6 @@ export default function VideoPage() {
           {/* Remaster Videos with video showing containers + studio */}
           <VideoEnhancer onOpenPricing={() => setIsPricingOpen(true)} />
         </div>
-
-        {/* Footer */}
-        <Footer />
       </div>
 
       {/* Paywall Modal */}

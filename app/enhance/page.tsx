@@ -3,7 +3,6 @@
 import React, { Suspense, useState } from 'react';
 import { Sidebar } from '@/components/Sidebar';
 import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
 import { PaywallModal } from '@/components/PaywallModal';
 import { PhotoEnhancer } from '@/components/PhotoEnhancer';
 
@@ -53,9 +52,6 @@ export default function EnhancePage() {
           {/* Enhance Photos with video showing containers + studio */}
           <PhotoEnhancer onOpenPricing={() => setIsPricingOpen(true)} />
         </div>
-
-        {/* Footer */}
-        <Footer />
       </div>
 
       {/* Paywall Modal */}

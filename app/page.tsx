@@ -9,7 +9,6 @@ import { PhotoEnhancer } from '@/components/PhotoEnhancer';
 import { VideoEnhancer } from '@/components/VideoEnhancer';
 import { AIImageCreation } from '@/components/AIImageCreation';
 import { PaywallModal } from '@/components/PaywallModal';
-import { Footer } from '@/components/Footer';
 
 function HomeContent() {
   const searchParams = useSearchParams();
@@ -92,9 +91,6 @@ function HomeContent() {
             <VideoEnhancer onOpenPricing={() => setIsPricingOpen(true)} />
           )}
         </main>
-
-        {/* Footer */}
-        <Footer />
       </div>
 
       {/* Global Paywall Modal */}
