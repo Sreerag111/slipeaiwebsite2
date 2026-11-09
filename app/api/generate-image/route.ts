@@ -1,9 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+export const maxDuration = 60; // Allow sufficient time for AI image synthesis
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const prompt = body?.prompt;
+    const requestedRatio = body?.aspectRatio || '1:1';
 
     if (!prompt || typeof prompt !== 'string' || !prompt.trim()) {
       return NextResponse.json(
@@ -13,21 +16,36 @@ export async function POST(req: NextRequest) {
     }
 
     const trimmedPrompt = prompt.trim();
+
+    // Map aspect ratios to exact dimensions supported by OpenAI image generation models
+    let targetSize = '1024x1024';
+    let normalizedRatio = '1:1';
+
+    if (requestedRatio === '9:16' || requestedRatio === 'portrait') {
+      targetSize = '1024x1792';
+      normalizedRatio = '9:16';
+    } else if (requestedRatio === '16:9' || requestedRatio === 'landscape') {
+      targetSize = '1792x1024';
+      normalizedRatio = '16:9';
+    } else if (body?.size) {
+      targetSize = body.size;
+    }
+
     const primaryKey = process.env.IMAGE_GEN_API_KEY || '';
     const secondaryKey = process.env.OPENAI_API_KEY || '';
 
     const keysToTry = [primaryKey, secondaryKey].filter(Boolean);
 
-    // Try OpenAI gpt-image-2 model with fallback to gpt-image-1.5 / dall-e-3
+    // Try OpenAI models: gpt-image-2 (primary verified), gpt-image-1.5, chatgpt-image-latest, dall-e-3
     for (const key of keysToTry) {
-      const modelsToTry = ['gpt-image-2', 'gpt-image-1.5', 'dall-e-3'];
+      const modelsToTry = ['gpt-image-2', 'gpt-image-1.5', 'chatgpt-image-latest', 'dall-e-3'];
       for (const model of modelsToTry) {
         try {
           const payload: any = {
             model,
             prompt: trimmedPrompt,
             n: 1,
-            size: '1024x1024',
+            size: targetSize,
           };
 
           const response = await fetch('https://api.openai.com/v1/images/generations', {
@@ -57,13 +75,15 @@ export async function POST(req: NextRequest) {
                   success: true,
                   imageUrl,
                   prompt: trimmedPrompt,
-                  model: 'gpt-image-2',
+                  model,
+                  aspectRatio: normalizedRatio,
+                  size: targetSize,
                 });
               }
             }
           } else {
             const errText = await response.text();
-            console.warn(`OpenAI image generation error with model ${model}:`, errText);
+            console.warn(`OpenAI image generation error with model ${model} (size: ${targetSize}):`, errText);
           }
         } catch (callErr) {
           console.warn(`Error invoking OpenAI model ${model}:`, callErr);

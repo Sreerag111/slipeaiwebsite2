@@ -8,6 +8,7 @@ import {
   RotateCcw,
   ArrowUpRight,
   Check,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { saveAs } from 'file-saver';
 
@@ -15,8 +16,12 @@ interface AIImageCreationProps {
   onStartEnhancing?: () => void;
 }
 
+export type AspectRatio = '9:16' | '16:9' | '1:1';
+
 export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
   const [prompt, setPrompt] = useState('');
+  const [aspectRatio, setAspectRatio] = useState<AspectRatio>('9:16');
+  const [generatedRatio, setGeneratedRatio] = useState<AspectRatio>('9:16');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
   const [lastPrompt, setLastPrompt] = useState<string>('');
@@ -64,13 +69,17 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
       const res = await fetch('/api/generate-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: textToUse }),
+        body: JSON.stringify({
+          prompt: textToUse,
+          aspectRatio,
+        }),
       });
 
       const data = await res.json();
       if (res.ok && data.imageUrl) {
         setGeneratedImageUrl(data.imageUrl);
         setLastPrompt(textToUse);
+        setGeneratedRatio(data.aspectRatio || aspectRatio);
       } else {
         alert(data.error || 'Failed to generate image. Please try again.');
       }
@@ -85,6 +94,7 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
   const handleDownload = () => {
     if (!generatedImageUrl) return;
     try {
+      const ratioTag = generatedRatio.replace(':', 'x');
       if (generatedImageUrl.startsWith('data:')) {
         const parts = generatedImageUrl.split(',');
         const mime = parts[0].match(/:(.*?);/)?.[1] || 'image/png';
@@ -95,15 +105,30 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
         }
         const byteArray = new Uint8Array(byteNumbers);
         const blob = new Blob([byteArray], { type: mime });
-        saveAs(blob, `slipeai_creation_${Date.now()}.png`);
+        saveAs(blob, `slipeai_creation_${ratioTag}_${Date.now()}.png`);
       } else {
-        saveAs(generatedImageUrl, `slipeai_creation_${Date.now()}.png`);
+        saveAs(generatedImageUrl, `slipeai_creation_${ratioTag}_${Date.now()}.png`);
       }
     } catch (e) {
       console.error('Download error:', e);
       window.open(generatedImageUrl, '_blank');
     }
   };
+
+  // Dynamic layout classes based on aspect ratio
+  const stageRatioClass =
+    aspectRatio === '9:16'
+      ? 'aspect-[9/16] max-h-[580px] max-w-sm mx-auto'
+      : aspectRatio === '16:9'
+      ? 'aspect-video max-h-[520px] w-full'
+      : 'aspect-square max-h-[520px] max-w-xl mx-auto';
+
+  const outputRatioClass =
+    generatedRatio === '9:16'
+      ? 'aspect-[9/16] max-h-[640px] max-w-sm sm:max-w-md mx-auto'
+      : generatedRatio === '16:9'
+      ? 'aspect-video max-h-[560px] w-full'
+      : 'aspect-square max-h-[560px] max-w-xl mx-auto';
 
   return (
     <section id="create" className="py-14 sm:py-20 md:py-28 border-t border-slate-200/80 bg-[#F8FAFC]">
@@ -141,8 +166,8 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
 
           {/* Central Output / Showcase Stage */}
           {isGenerating ? (
-            /* Generating Stage: ONLY show Generating with animation (no icons, no subtitles, no progress bar) */
-            <div className="relative aspect-square sm:aspect-[16/10] max-h-[520px] w-full rounded-2xl border border-slate-200 bg-slate-50/90 flex items-center justify-center p-6 overflow-hidden container-shade">
+            /* Generating Stage: ONLY show Generating with animation */
+            <div className={`relative ${stageRatioClass} w-full rounded-2xl border border-slate-200 bg-slate-50/90 flex items-center justify-center p-6 overflow-hidden container-shade transition-all duration-300`}>
               {/* Full container background shimmer sweep */}
               <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <div className="w-[200%] h-full -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-blue-500/10 to-transparent" />
@@ -163,19 +188,27 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
           ) : generatedImageUrl ? (
             /* Output Display Stage */
             <div className="space-y-6">
-              <div className="relative aspect-square sm:aspect-[16/10] max-h-[560px] w-full rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 flex items-center justify-center container-shade-lg group">
+              <div className={`relative ${outputRatioClass} w-full rounded-2xl overflow-hidden border border-slate-200 bg-slate-950 flex items-center justify-center container-shade-lg group shadow-xl transition-all duration-300`}>
                 <img
                   src={generatedImageUrl}
                   alt={lastPrompt}
                   className="max-h-full max-w-full object-contain"
                 />
+
+                {/* Ratio & Model Badge */}
+                <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-slate-950/85 backdrop-blur-md border border-white/10 text-white text-[11px] font-black px-2.5 py-1 rounded-lg shadow-md">
+                  <span className="text-blue-400">{generatedRatio}</span>
+                  <span className="text-slate-400 font-semibold text-[10px]">
+                    {generatedRatio === '9:16' ? 'Portrait' : generatedRatio === '16:9' ? 'Landscape' : 'Square'}
+                  </span>
+                </div>
               </div>
 
               {/* Prompt recap & action buttons */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
                 <div className="space-y-0.5 max-w-xl">
                   <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">
-                    Generated Description
+                    Generated Description ({generatedRatio})
                   </span>
                   <p className="text-xs sm:text-sm font-bold text-slate-900 line-clamp-2">
                     &ldquo;{lastPrompt}&rdquo;
@@ -188,7 +221,7 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
                     className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md transition-all active:scale-95"
                   >
                     <Download className="h-4 w-4" />
-                    <span>Download Image</span>
+                    <span>Download Image ({generatedRatio})</span>
                   </button>
 
                   <button
@@ -221,7 +254,7 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
               </p>
             </div>
 
-            {/* Amazing Responsive Grid: 2 cols on mobile, 3 cols on tablet, 6 cols on laptop/desktop */}
+            {/* Responsive Grid: 2 cols on mobile, 3 cols on tablet, 6 cols on laptop/desktop */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
               {stylePresets.map((style, idx) => {
                 const isSelected = prompt === style.prompt;
@@ -271,8 +304,79 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
             </div>
           </div>
 
-          {/* Bottom Prompt Bar: "Describe your image" */}
-          <div className="rounded-3xl border border-slate-200/80 bg-slate-50/60 p-3 sm:p-4 container-shade-sm space-y-2">
+          {/* Bottom Prompt Bar: "Describe your image" with Aspect Ratio selector directly above */}
+          <div className="rounded-3xl border border-slate-200/80 bg-slate-50/60 p-4 sm:p-5 container-shade-sm space-y-3.5">
+            {/* Aspect Ratio Selector (Above "Describe your image") */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-200/70">
+              <div className="flex items-center gap-2">
+                <span className="text-xs sm:text-sm font-black text-slate-950 tracking-tight flex items-center gap-1.5">
+                  <SlidersHorizontal className="w-3.5 h-3.5 text-blue-600" />
+                  Select Aspect Ratio:
+                </span>
+                <span className="text-[11px] text-slate-500 font-medium hidden sm:inline">
+                  (Choose 9:16 or 16:9 format)
+                </span>
+              </div>
+
+              {/* Functional Aspect Ratio Options */}
+              <div className="inline-flex items-center gap-1.5 p-1 bg-white border border-slate-200/90 rounded-2xl shadow-sm self-start sm:self-auto">
+                {/* 9:16 Ratio Button */}
+                <button
+                  type="button"
+                  onClick={() => setAspectRatio('9:16')}
+                  className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    aspectRatio === '9:16'
+                      ? 'bg-blue-600 text-white shadow-sm ring-1 ring-blue-600'
+                      : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100'
+                  }`}
+                  title="9:16 Vertical Portrait (1024x1792) - Reels, Stories & Mobile Wallpaper"
+                >
+                  <span className="inline-block w-2.5 h-4 border-2 border-current rounded-[2px]" />
+                  <span>9:16</span>
+                  <span className={`text-[10px] uppercase font-semibold hidden sm:inline ${aspectRatio === '9:16' ? 'text-blue-100' : 'text-slate-400'}`}>
+                    Portrait
+                  </span>
+                </button>
+
+                {/* 16:9 Ratio Button */}
+                <button
+                  type="button"
+                  onClick={() => setAspectRatio('16:9')}
+                  className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    aspectRatio === '16:9'
+                      ? 'bg-blue-600 text-white shadow-sm ring-1 ring-blue-600'
+                      : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100'
+                  }`}
+                  title="16:9 Widescreen Landscape (1792x1024) - Cinematic, Banner & Desktop"
+                >
+                  <span className="inline-block w-4 h-2.5 border-2 border-current rounded-[2px]" />
+                  <span>16:9</span>
+                  <span className={`text-[10px] uppercase font-semibold hidden sm:inline ${aspectRatio === '16:9' ? 'text-blue-100' : 'text-slate-400'}`}>
+                    Landscape
+                  </span>
+                </button>
+
+                {/* 1:1 Ratio Button */}
+                <button
+                  type="button"
+                  onClick={() => setAspectRatio('1:1')}
+                  className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                    aspectRatio === '1:1'
+                      ? 'bg-blue-600 text-white shadow-sm ring-1 ring-blue-600'
+                      : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100'
+                  }`}
+                  title="1:1 Square (1024x1024) - Profile Avatar & Square Post"
+                >
+                  <span className="inline-block w-3 h-3 border-2 border-current rounded-[2px]" />
+                  <span>1:1</span>
+                  <span className={`text-[10px] uppercase font-semibold hidden sm:inline ${aspectRatio === '1:1' ? 'text-blue-100' : 'text-slate-400'}`}>
+                    Square
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            {/* Prompt input row: "Describe your image" */}
             <div className="relative flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center">
               <div className="relative flex-1">
                 <input
@@ -285,7 +389,7 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
                     }
                   }}
                   disabled={isGenerating}
-                  placeholder="Describe your image (e.g., A vintage 1950s cinematic portrait with warm golden hour lighting)..."
+                  placeholder={`Describe your image in ${aspectRatio} ratio (e.g., A vintage cinematic portrait with warm golden hour lighting)...`}
                   className="w-full bg-white border-2 border-slate-200 focus:border-blue-600 focus:ring-4 focus:ring-blue-500/10 px-4 sm:px-5 py-3.5 rounded-2xl text-xs sm:text-sm text-slate-950 font-medium placeholder-slate-400 outline-none transition-all shadow-inner"
                 />
               </div>
@@ -297,7 +401,7 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
                 className="flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-black text-xs sm:text-sm uppercase tracking-wider shadow-md hover:shadow-lg disabled:shadow-none transition-all active:scale-95 shrink-0"
               >
                 <Sparkles className="h-4 w-4" />
-                <span>{isGenerating ? 'Generating...' : 'Generate Image'}</span>
+                <span>{isGenerating ? 'Generating...' : `Generate ${aspectRatio}`}</span>
               </button>
             </div>
           </div>
