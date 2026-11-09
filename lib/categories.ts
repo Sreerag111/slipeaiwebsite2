@@ -5,7 +5,6 @@ export interface EnhancementCategory {
   file: string;
   stepText: string;
   model: string;
-  badge?: string;
   iconName: string;
 }
 
@@ -17,7 +16,6 @@ export const ENHANCEMENT_CATEGORIES: EnhancementCategory[] = [
     file: 'enhance_photos_quality.webp',
     stepText: 'Applying high-fidelity super-resolution...',
     model: 'High Fidelity V3',
-    badge: 'Popular',
     iconName: 'Sparkles',
   },
   {
@@ -27,7 +25,6 @@ export const ENHANCEMENT_CATEGORIES: EnhancementCategory[] = [
     file: 'cleanup_photos.webp',
     stepText: 'Running context reconstruction & noise reduction...',
     model: 'Denoise Max',
-    badge: 'Restoration',
     iconName: 'Wand2',
   },
   {
@@ -37,7 +34,6 @@ export const ENHANCEMENT_CATEGORIES: EnhancementCategory[] = [
     file: 'bw_to_color.webp',
     stepText: 'Synthesizing authentic archival skin tones & natural color...',
     model: 'Wonder 3.5',
-    badge: 'Generative AI',
     iconName: 'Palette',
   },
   {
@@ -56,7 +52,6 @@ export const ENHANCEMENT_CATEGORIES: EnhancementCategory[] = [
     file: 'fix_dust_and_scratches.webp',
     stepText: 'Removing deep scratches, creases & paper tears...',
     model: 'Extreme',
-    badge: 'Archival',
     iconName: 'ShieldAlert',
   },
   {
@@ -93,7 +88,6 @@ export const ENHANCEMENT_CATEGORIES: EnhancementCategory[] = [
     file: 'upscale_photos.webp',
     stepText: 'Executing 4K Ultra-HD super-resolution upscale...',
     model: 'Standard V2',
-    badge: 'Ultra HD',
     iconName: 'Maximize2',
   },
   {
@@ -103,7 +97,6 @@ export const ENHANCEMENT_CATEGORIES: EnhancementCategory[] = [
     file: 'remove_background.webp',
     stepText: 'Isolating subject with sub-pixel alpha matting...',
     model: 'Object',
-    badge: 'Transparent PNG',
     iconName: 'Scissors',
   },
 ];

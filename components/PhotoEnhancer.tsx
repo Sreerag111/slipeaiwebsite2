@@ -127,12 +127,6 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
                       loading="eager"
                     />
 
-                    {cat.badge && (
-                      <span className="absolute top-3 left-3 text-[10px] sm:text-[11px] font-black uppercase tracking-wider bg-slate-950/80 backdrop-blur-md text-white px-2.5 py-0.5 rounded-lg shadow-sm border border-white/10">
-                        {cat.badge}
-                      </span>
-                    )}
-
                     {/* Hover indicator: "Select to Enhance ->" */}
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3 pointer-events-none">
                       <span className="text-[11px] font-bold text-white bg-blue-600/95 px-3 py-1 rounded-lg backdrop-blur-sm shadow-md flex items-center gap-1.5 font-display">
@@ -161,13 +155,6 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
               );
             })}
           </div>
-        </div>
-
-        {/* Bottom Helper Bar */}
-        <div className="text-center pt-4">
-          <p className="text-xs text-slate-500 font-display font-medium">
-            Swipe or use arrow buttons to explore all 10 features • Click any feature to upload and enhance your photo
-          </p>
         </div>
       </div>
     </section>

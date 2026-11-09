@@ -269,13 +269,6 @@ export function PhotoEnhanceStudio({ onOpenPricing }: PhotoEnhanceStudioProps) {
 
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
             <div>
-              {activeCategory.badge && (
-                <div className="flex items-center gap-2 mb-1.5">
-                  <span className="text-[11px] bg-slate-900 text-white px-2.5 py-0.5 rounded-md font-bold">
-                    {activeCategory.badge}
-                  </span>
-                </div>
-              )}
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-950 font-display tracking-tight">
                 {activeCategory.label}
               </h1>
