@@ -256,16 +256,6 @@ export function AIImageCreation({
   return (
     <section id="create" className="pt-8 pb-16 sm:pt-12 sm:pb-20 md:pt-16 md:pb-28 bg-[#F8FAFC]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
-        {/* Center Main Greeting Header: Styled exactly like reference image */}
-        <div className="text-center max-w-3xl mx-auto space-y-2">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-950 font-display tracking-tight leading-tight">
-            Hi Sreerag, how can I help you today?
-          </h1>
-          <p className="text-xs sm:text-sm md:text-base text-slate-500 font-display font-medium max-w-xl mx-auto px-2">
-            Describe your idea, upload a reference photo, or choose a style preset below.
-          </p>
-        </div>
-
         {/* Central Search / Image Creation Bar with '+' File Upload Option */}
         <div className="max-w-3xl mx-auto w-full space-y-3">
           <div className="relative rounded-full border border-slate-200/90 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.06)] px-2 sm:px-3 py-2 flex items-center gap-2 transition-all focus-within:border-blue-600 focus-within:ring-4 focus-within:ring-blue-500/10">
@@ -359,89 +349,6 @@ export function AIImageCreation({
               aria-label="Generate Image"
             >
               <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-
-          {/* Quick Filter / Action Pills below input bar (Matches reference image) */}
-          <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 px-1">
-            <button
-              type="button"
-              onClick={() => {
-                if (onStartEnhancing) {
-                  onStartEnhancing();
-                } else {
-                  const el = document.getElementById('enhancer');
-                  if (el) el.scrollIntoView({ behavior: 'smooth' });
-                  else window.location.href = '/enhance';
-                }
-              }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200/90 hover:border-slate-300 text-xs font-bold text-slate-700 hover:text-slate-950 transition-all shadow-2xs font-display hover:scale-102 cursor-pointer"
-            >
-              <Wand2 className="w-3.5 h-3.5 text-blue-600" />
-              <span>Enhance Photos</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                if (onStartRemasterVideo) {
-                  onStartRemasterVideo();
-                } else {
-                  window.location.href = '/video';
-                }
-              }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200/90 hover:border-slate-300 text-xs font-bold text-slate-700 hover:text-slate-950 transition-all shadow-2xs font-display hover:scale-102 cursor-pointer"
-            >
-              <Film className="w-3.5 h-3.5 text-blue-600" />
-              <span>Remaster Videos</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setPrompt(stylePresets[0].prompt);
-                handleGenerate(stylePresets[0].prompt);
-              }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200/90 hover:border-slate-300 text-xs font-bold text-slate-700 hover:text-slate-950 transition-all shadow-2xs font-display hover:scale-102"
-            >
-              <Camera className="w-3.5 h-3.5 text-amber-600" />
-              <span>Vintage 90s</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setPrompt(stylePresets[1].prompt);
-                handleGenerate(stylePresets[1].prompt);
-              }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200/90 hover:border-slate-300 text-xs font-bold text-slate-700 hover:text-slate-950 transition-all shadow-2xs font-display hover:scale-102"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-              <span>AI Photoshoot</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setPrompt(stylePresets[2].prompt);
-                handleGenerate(stylePresets[2].prompt);
-              }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200/90 hover:border-slate-300 text-xs font-bold text-slate-700 hover:text-slate-950 transition-all shadow-2xs font-display hover:scale-102"
-            >
-              <SunMedium className="w-3.5 h-3.5 text-amber-500" />
-              <span>Golden Hour</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setPrompt(stylePresets[3].prompt);
-                handleGenerate(stylePresets[3].prompt);
-              }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200/90 hover:border-slate-300 text-xs font-bold text-slate-700 hover:text-slate-950 transition-all shadow-2xs font-display hover:scale-102"
-            >
-              <Palette className="w-3.5 h-3.5 text-slate-700" />
-              <span>Archival B&W</span>
             </button>
           </div>
         </div>
@@ -546,18 +453,7 @@ export function AIImageCreation({
         )}
 
         {/* Featured Styles & Presets Carousel (Clearly visible large cards) */}
-        <div className="space-y-4 pt-2">
-          <div className="flex items-center justify-between px-1">
-            <div>
-              <h3 className="text-lg sm:text-xl font-extrabold text-slate-950 font-display tracking-tight">
-                Featured Styles & Presets
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 font-display font-medium">
-                Click any style to instantly preview and inspire your prompt
-              </p>
-            </div>
-          </div>
-
+        <div className="pt-2">
           {/* Carousel Container with Circular Navigation Buttons */}
           <div className="relative group/carousel">
             {canScrollLeft && (
