@@ -289,36 +289,17 @@ export default function PricingPage() {
                   <div className="flex items-baseline gap-1">
                     <span className="text-4xl sm:text-5xl font-black text-slate-950">₹0</span>
                   </div>
-                  <span className="text-[11px] font-semibold text-slate-400 mt-1 block">
-                    No credit card or payment needed
-                  </span>
                 </div>
 
                 {/* Features list */}
                 <ul className="space-y-3 text-xs sm:text-sm font-semibold text-slate-700">
                   <li className="flex items-start gap-2.5">
                     <Check className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span>2 Free lifetime photo restorations</span>
+                    <span>Photo 2 Enhancement</span>
                   </li>
                   <li className="flex items-start gap-2.5">
                     <Check className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span>Up to 1080p output resolution</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <Check className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span>Access to all 10 photo model previews</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <Check className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span>Interactive split-screen comparison viewer</span>
-                  </li>
-                  <li className="flex items-start gap-2.5 text-slate-400">
-                    <Check className="h-4 w-4 text-slate-300 shrink-0 mt-0.5" />
-                    <span>Standard cloud inference queue</span>
-                  </li>
-                  <li className="flex items-start gap-2.5 text-slate-400">
-                    <Check className="h-4 w-4 text-slate-300 shrink-0 mt-0.5" />
-                    <span>Personal non-commercial use</span>
+                    <span>3 AI Image Creation</span>
                   </li>
                 </ul>
               </div>
