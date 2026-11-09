@@ -15,13 +15,6 @@ export const VIDEO_CATEGORIES: VideoCategory[] = [
     iconName: 'Focus',
   },
   {
-    id: 'auto',
-    label: 'Auto Upscale',
-    desc: 'Automatic 2x/4K video super-resolution with artifact suppression.',
-    file: 'auto.webp',
-    iconName: 'Maximize2',
-  },
-  {
     id: 'slow_motion',
     label: 'Slow Motion',
     desc: 'Optical flow 60fps frame interpolation for cinematic high-framerate fluid motion.',

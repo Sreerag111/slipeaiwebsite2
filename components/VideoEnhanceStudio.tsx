@@ -8,10 +8,6 @@ import {
   Upload,
   Lock,
   Film,
-  CheckCircle2,
-  Sparkles,
-  Zap,
-  Play,
   RotateCcw,
 } from 'lucide-react';
 import { VIDEO_CATEGORIES, VideoCategory } from '@/lib/videoCategories';
@@ -88,9 +84,9 @@ export function VideoEnhanceStudio({ onOpenPricing }: VideoEnhanceStudioProps) {
 
   return (
     <section className="py-10 sm:py-16 md:py-20 min-h-screen bg-[#F8FAFC]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 space-y-8">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 space-y-5 sm:space-y-6">
         {/* Back Link & Header */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           <Link
             href="/#video"
             className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-950 transition-colors group"
@@ -99,12 +95,12 @@ export function VideoEnhanceStudio({ onOpenPricing }: VideoEnhanceStudioProps) {
             <span>Back to All Features</span>
           </Link>
 
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-2 border-b border-slate-200/80">
             <div>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-950 font-display tracking-tight">
                 {activeCategory.label}
               </h1>
-              <p className="text-xs sm:text-sm text-slate-600 font-display font-medium mt-1">
+              <p className="text-xs sm:text-sm text-slate-600 font-display font-medium mt-0.5">
                 {activeCategory.desc}
               </p>
             </div>
@@ -114,106 +110,62 @@ export function VideoEnhanceStudio({ onOpenPricing }: VideoEnhanceStudioProps) {
               href="/#video"
               className="self-start md:self-auto text-xs font-bold text-blue-600 hover:text-blue-800 underline transition-colors"
             >
-              Browse all 8 video features
+              Browse all 7 video features
             </Link>
           </div>
         </div>
 
-        {/* Category Pill Switcher (Fast category change on the page) */}
-        <div className="p-1.5 rounded-2xl bg-white border border-slate-200/90 shadow-sm overflow-x-auto scrollbar-none flex items-center gap-1.5">
-          {VIDEO_CATEGORIES.map((cat) => {
-            const isCurrent = selectedCategory === cat.id;
-            return (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => handleCategorySwitch(cat.id)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all shrink-0 ${
-                  isCurrent
-                    ? 'bg-slate-950 text-white shadow-sm'
-                    : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100'
-                }`}
-              >
-                <span>{cat.label}</span>
-              </button>
-            );
-          })}
+        {/* Very Small Compact Category Slide Bar */}
+        <div className="flex items-center">
+          <div className="p-1 rounded-xl bg-slate-100/90 border border-slate-200/80 shadow-xs overflow-x-auto scrollbar-none flex items-center gap-1 max-w-full">
+            {VIDEO_CATEGORIES.map((cat) => {
+              const isCurrent = selectedCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => handleCategorySwitch(cat.id)}
+                  className={`flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold whitespace-nowrap transition-all shrink-0 ${
+                    isCurrent
+                      ? 'bg-slate-950 text-white shadow-xs'
+                      : 'text-slate-600 hover:text-slate-950 hover:bg-white/80'
+                  }`}
+                >
+                  <span>{cat.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Upload & Workspace Area */}
         <div className="rounded-3xl border border-slate-200/90 bg-white p-5 sm:p-8 md:p-10 container-shade-xl">
           {!videoFile ? (
             /* Dropzone: Dedicated upload section */
-            <div className="space-y-8">
-              <div
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={handleDrop}
-                onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-slate-200 hover:border-blue-600 rounded-3xl p-8 sm:p-14 md:p-16 text-center cursor-pointer transition-colors bg-slate-50/70 hover:bg-blue-50/20 flex flex-col items-center justify-center space-y-4"
-              >
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="video/mp4"
-                  onChange={handleFileChange}
-                  className="hidden"
-                />
-                <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-white border border-slate-200 text-blue-600 shadow-md">
-                  <Upload className="h-6 w-6 sm:h-7 sm:w-7 text-blue-600" />
-                </div>
-                <div className="space-y-1.5">
-                  <p className="text-sm sm:text-lg font-bold text-slate-900 font-display">
-                    Drag and drop your MP4 video here, or{' '}
-                    <span className="underline text-blue-600 font-black">browse files</span>
-                  </p>
-                  <p className="text-xs sm:text-sm text-slate-500 font-semibold font-display">
-                    Supports MP4 video (up to 75 MB)
-                  </p>
-                </div>
+            <div
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={handleDrop}
+              onClick={() => fileInputRef.current?.click()}
+              className="border-2 border-dashed border-slate-200 hover:border-blue-600 rounded-3xl p-8 sm:p-14 md:p-20 text-center cursor-pointer transition-colors bg-slate-50/70 hover:bg-blue-50/20 flex flex-col items-center justify-center space-y-4"
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="video/mp4"
+                onChange={handleFileChange}
+                className="hidden"
+              />
+              <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-white border border-slate-200 text-blue-600 shadow-md">
+                <Upload className="h-6 w-6 sm:h-7 sm:w-7 text-blue-600" />
               </div>
-
-              {/* Feature Showcase / Sample Preview */}
-              <div className="pt-2">
-                <div className="flex items-center gap-2 mb-3">
-                  <Sparkles className="w-4 h-4 text-blue-600" />
-                  <span className="text-xs font-bold text-slate-700 uppercase tracking-wider font-display">
-                    {activeCategory.label} Preview
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center bg-slate-50/80 rounded-2xl p-4 sm:p-6 border border-slate-200/80">
-                  <div className="relative aspect-[16/10] rounded-xl overflow-hidden border border-slate-200 bg-slate-950 shadow-md">
-                    <img
-                      src={`/assets/videos/remaster_categories/${activeCategory.file}`}
-                      alt={activeCategory.label}
-                      className="w-full h-full object-cover"
-                      loading="eager"
-                    />
-                  </div>
-
-                  <div className="space-y-3">
-                    <h3 className="text-base sm:text-lg font-bold text-slate-950 font-display">
-                      Remaster with {activeCategory.label}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-display">
-                      {activeCategory.desc}
-                    </p>
-                    <ul className="text-xs text-slate-500 space-y-1.5 font-display pt-1">
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                        <span>Up to 4K 60fps high-framerate rendering</span>
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                        <span>Preserves native grain and authentic motion dynamics</span>
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                        <span>Accelerated on dedicated GPU cloud clusters</span>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
+              <div className="space-y-1.5">
+                <p className="text-sm sm:text-lg font-bold text-slate-900 font-display">
+                  Drag and drop your MP4 video here, or{' '}
+                  <span className="underline text-blue-600 font-black">browse files</span>
+                </p>
+                <p className="text-xs sm:text-sm text-slate-500 font-semibold font-display">
+                  Supports MP4 video (up to 75 MB)
+                </p>
               </div>
             </div>
           ) : (

@@ -256,9 +256,9 @@ export function PhotoEnhanceStudio({ onOpenPricing }: PhotoEnhanceStudioProps) {
 
   return (
     <section className="py-10 sm:py-16 md:py-20 min-h-screen bg-[#F8FAFC]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 space-y-8">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 space-y-5 sm:space-y-6">
         {/* Back Link & Header */}
-        <div className="space-y-4">
+        <div className="space-y-3">
           <Link
             href="/#enhancer"
             className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-600 hover:text-slate-950 transition-colors group"
@@ -267,12 +267,12 @@ export function PhotoEnhanceStudio({ onOpenPricing }: PhotoEnhanceStudioProps) {
             <span>Back to All Features</span>
           </Link>
 
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-2 border-b border-slate-200/80">
             <div>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-950 font-display tracking-tight">
                 {activeCategory.label}
               </h1>
-              <p className="text-xs sm:text-sm text-slate-600 font-display font-medium mt-1">
+              <p className="text-xs sm:text-sm text-slate-600 font-display font-medium mt-0.5">
                 {activeCategory.desc}
               </p>
             </div>
@@ -287,25 +287,27 @@ export function PhotoEnhanceStudio({ onOpenPricing }: PhotoEnhanceStudioProps) {
           </div>
         </div>
 
-        {/* Category Pill Switcher (Fast category change on the page) */}
-        <div className="p-1.5 rounded-2xl bg-white border border-slate-200/90 shadow-sm overflow-x-auto scrollbar-none flex items-center gap-1.5">
-          {ENHANCEMENT_CATEGORIES.map((cat) => {
-            const isCurrent = selectedCategory === cat.id;
-            return (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => handleCategorySwitch(cat.id)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all shrink-0 ${
-                  isCurrent
-                    ? 'bg-slate-950 text-white shadow-sm'
-                    : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100'
-                }`}
-              >
-                <span>{cat.label}</span>
-              </button>
-            );
-          })}
+        {/* Very Small Compact Category Slide Bar */}
+        <div className="flex items-center">
+          <div className="p-1 rounded-xl bg-slate-100/90 border border-slate-200/80 shadow-xs overflow-x-auto scrollbar-none flex items-center gap-1 max-w-full">
+            {ENHANCEMENT_CATEGORIES.map((cat) => {
+              const isCurrent = selectedCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  onClick={() => handleCategorySwitch(cat.id)}
+                  className={`flex items-center px-2.5 py-1 rounded-lg text-[11px] font-bold whitespace-nowrap transition-all shrink-0 ${
+                    isCurrent
+                      ? 'bg-slate-950 text-white shadow-xs'
+                      : 'text-slate-600 hover:text-slate-950 hover:bg-white/80'
+                  }`}
+                >
+                  <span>{cat.label}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Upload & Workspace Area */}
