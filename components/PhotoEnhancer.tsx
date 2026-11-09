@@ -68,17 +68,12 @@ export function PhotoEnhancer({ onOpenPricing }: PhotoEnhancerProps) {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header: Styled like the sample image */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-slate-200 bg-white text-[11px] sm:text-xs font-bold text-slate-800 shadow-sm container-shade-sm">
-            <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-            <span className="font-display">Topaz Labs AI Studio Features</span>
-          </div>
-
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-950 font-display tracking-tight leading-tight">
             Select Your Enhancement Category
           </h2>
 
           <p className="text-sm sm:text-base md:text-lg text-slate-600 font-display font-medium max-w-2xl mx-auto px-2 leading-relaxed">
-            Choose an official Topaz Labs AI model tailored to your photo&apos;s specific restoration needs.
+            Choose an enhancement feature tailored to your photo&apos;s specific restoration needs.
           </p>
         </div>
 

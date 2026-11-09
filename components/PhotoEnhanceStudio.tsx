@@ -157,7 +157,7 @@ export function PhotoEnhanceStudio({ onOpenPricing }: PhotoEnhanceStudioProps) {
     setIsProcessing(true);
     setErrorMessage(null);
     setProgress(10);
-    setProcessStep('Connecting to Topaz Labs AI inference engine...');
+    setProcessStep('Connecting to AI inference engine...');
 
     const timer1 = setTimeout(() => {
       setProgress(35);
@@ -197,13 +197,13 @@ export function PhotoEnhanceStudio({ onOpenPricing }: PhotoEnhanceStudioProps) {
           setProcessStep('Enhancement complete!');
           localStorage.setItem('slipeai_free_uses', (currentUses + 1).toString());
         } else {
-          setErrorMessage('Failed to retrieve enhanced image from Topaz engine.');
+          setErrorMessage('Failed to retrieve enhanced image. Please try again.');
         }
       } else {
         const errJson = await res.json().catch(() => ({}));
         setErrorMessage(
           errJson.error ||
-            'Topaz engine encountered an error while enhancing this photo. Please try again.'
+            'Engine encountered an error while enhancing this photo. Please try again.'
         );
       }
     } catch (err: any) {
@@ -269,16 +269,13 @@ export function PhotoEnhanceStudio({ onOpenPricing }: PhotoEnhanceStudioProps) {
 
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
             <div>
-              <div className="flex items-center gap-2.5 mb-1.5">
-                <span className="text-xs bg-blue-100 text-blue-900 border border-blue-200 px-2.5 py-0.5 rounded-md font-bold uppercase tracking-wider">
-                  Topaz {activeCategory.model}
-                </span>
-                {activeCategory.badge && (
-                  <span className="text-[11px] bg-slate-900 text-white px-2 py-0.5 rounded-md font-bold">
+              {activeCategory.badge && (
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="text-[11px] bg-slate-900 text-white px-2.5 py-0.5 rounded-md font-bold">
                     {activeCategory.badge}
                   </span>
-                )}
-              </div>
+                </div>
+              )}
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-950 font-display tracking-tight">
                 {activeCategory.label}
               </h1>
@@ -360,10 +357,10 @@ export function PhotoEnhanceStudio({ onOpenPricing }: PhotoEnhanceStudioProps) {
                   <span className="text-xs bg-blue-50 border border-blue-200 px-2.5 py-1 rounded-lg text-blue-900 font-bold">
                     {activeCategory.label}
                   </span>
-                  {modelUsed && (
+                  {enhancedUrl && (
                     <span className="inline-flex items-center gap-1 text-[11px] bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold px-2 py-0.5 rounded-md">
                       <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                      <span>{modelUsed}</span>
+                      <span>Enhanced</span>
                     </span>
                   )}
                 </div>
@@ -475,11 +472,11 @@ export function PhotoEnhanceStudio({ onOpenPricing }: PhotoEnhanceStudioProps) {
                 <div className="relative aspect-[4/3] sm:aspect-video min-h-[400px] sm:min-h-[540px] max-h-[680px] w-full overflow-hidden border border-slate-200 rounded-2xl bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] bg-slate-100 flex items-center justify-center p-3 shadow-inner">
                   <img
                     src={enhancedUrl}
-                    alt="Full Topaz Enhanced Output"
+                    alt="Full Enhanced Output"
                     className="max-h-full max-w-full object-contain rounded-xl shadow-lg"
                   />
                   <span className="absolute top-4 right-4 bg-slate-950 text-white text-xs font-black px-3 py-1 uppercase tracking-wider rounded-lg shadow-md">
-                    Topaz {modelUsed || activeCategory.model}
+                    Enhanced Result
                   </span>
                 </div>
               ) : viewMode === 'sideBySide' ? (
@@ -498,11 +495,11 @@ export function PhotoEnhanceStudio({ onOpenPricing }: PhotoEnhanceStudioProps) {
                   <div className="relative aspect-square w-full rounded-2xl border border-slate-200 bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:16px_16px] bg-slate-100 overflow-hidden flex items-center justify-center p-2 shadow-sm">
                     <img
                       src={enhancedUrl}
-                      alt="Topaz Enhanced"
+                      alt="Enhanced"
                       className="max-h-full max-w-full object-contain"
                     />
                     <span className="absolute top-3 right-3 bg-slate-950 text-white text-xs font-black px-2.5 py-0.5 rounded-lg shadow-sm">
-                      Topaz Enhanced
+                      Enhanced
                     </span>
                   </div>
                 </div>
@@ -524,7 +521,7 @@ export function PhotoEnhanceStudio({ onOpenPricing }: PhotoEnhanceStudioProps) {
                         className="w-full h-full object-contain"
                       />
                       <span className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-slate-950 text-white text-[10px] sm:text-xs font-black px-2.5 py-1 uppercase tracking-wider rounded-lg shadow-md">
-                        Topaz Enhanced
+                        Enhanced
                       </span>
                     </div>
 
@@ -555,7 +552,7 @@ export function PhotoEnhanceStudio({ onOpenPricing }: PhotoEnhanceStudioProps) {
                   </div>
                   {/* Instructions */}
                   <p className="text-center text-xs sm:text-sm font-semibold text-slate-500">
-                    Drag the center handle horizontally to compare original vs Topaz AI enhanced output
+                    Drag the center handle horizontally to compare original vs enhanced output
                   </p>
                 </div>
               )}
@@ -569,7 +566,7 @@ export function PhotoEnhanceStudio({ onOpenPricing }: PhotoEnhanceStudioProps) {
                     className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2.5 py-4 px-8 rounded-2xl bg-slate-950 text-white font-black text-xs sm:text-sm uppercase tracking-wider hover:bg-slate-800 transition-all shadow-xl container-shade disabled:opacity-50 active:scale-98"
                   >
                     <Sparkles className="h-4 w-4" />
-                    <span>{isProcessing ? 'Processing with Topaz AI...' : 'Run Topaz AI Enhancement'}</span>
+                    <span>{isProcessing ? 'Enhancing photo...' : 'Run AI Enhancement'}</span>
                   </button>
                 ) : (
                   <>
@@ -578,7 +575,7 @@ export function PhotoEnhanceStudio({ onOpenPricing }: PhotoEnhanceStudioProps) {
                       className="w-full sm:w-auto flex-1 flex items-center justify-center gap-2.5 py-4 px-8 rounded-2xl bg-slate-950 text-white font-black text-xs sm:text-sm uppercase tracking-wider hover:bg-slate-800 transition-all shadow-xl container-shade active:scale-98"
                     >
                       <Download className="h-4 w-4" />
-                      <span>Download Topaz HD Enhanced Image</span>
+                      <span>Download Enhanced HD Image</span>
                     </button>
                     <button
                       onClick={onOpenPricing}
