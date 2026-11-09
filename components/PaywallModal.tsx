@@ -162,12 +162,7 @@ export function PaywallModal({ isOpen, onClose }: PaywallModalProps) {
         className="relative w-full max-w-5xl max-h-[92vh] flex flex-col bg-white border border-slate-200/90 rounded-[32px] shadow-2xl text-slate-900 overflow-y-auto my-auto p-5 sm:p-8 md:p-10 space-y-8 font-display animate-in zoom-in-95 duration-200"
       >
         {/* Top bar with close button */}
-        <div className="flex items-center justify-between pb-3 border-b border-slate-100 shrink-0">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-black text-slate-950 tracking-tight">
-              SlipeAI Plans & Pricing
-            </span>
-          </div>
+        <div className="flex items-center justify-end pb-3 border-b border-slate-100 shrink-0">
           <button
             type="button"
             onClick={onClose}
@@ -259,7 +254,7 @@ export function PaywallModal({ isOpen, onClose }: PaywallModalProps) {
               <ul className="space-y-2.5 text-xs font-semibold text-slate-700">
                 <li className="flex items-start gap-2">
                   <Check className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <span>Photo 2 Enhancement</span>
+                  <span>2 Photo Enhancement</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />

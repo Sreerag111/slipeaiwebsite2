@@ -295,7 +295,7 @@ export default function PricingPage() {
                 <ul className="space-y-3 text-xs sm:text-sm font-semibold text-slate-700">
                   <li className="flex items-start gap-2.5">
                     <Check className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                    <span>Photo 2 Enhancement</span>
+                    <span>2 Photo Enhancement</span>
                   </li>
                   <li className="flex items-start gap-2.5">
                     <Check className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
