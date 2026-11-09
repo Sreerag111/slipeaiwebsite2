@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 import { Download, PanelLeft } from 'lucide-react';
 
 interface NavbarProps {
@@ -32,13 +31,6 @@ export function Navbar({
               <PanelLeft className="w-5 h-5 text-slate-800" />
             </button>
           )}
-
-          {/* SlipeAI Brand Logo */}
-          <Link href="/" className="flex items-center group py-1">
-            <span className="text-2xl sm:text-3xl font-black tracking-tight text-slate-950 group-hover:text-slate-700 transition-colors">
-              SlipeAI
-            </span>
-          </Link>
         </div>
 
         {/* Right Actions: Upgrade Pro & Get App */}
