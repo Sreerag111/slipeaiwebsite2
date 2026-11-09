@@ -141,12 +141,17 @@ export function VideoEnhanceStudio({ onOpenPricing }: VideoEnhanceStudioProps) {
         {/* Upload & Workspace Area */}
         <div className="rounded-3xl border border-slate-200/90 bg-white p-5 sm:p-8 md:p-10 container-shade-xl">
           {!videoFile ? (
-            /* Dropzone: Dedicated upload section */
+            /* Upload Dropzone with Dotted Grid Pattern on White Theme */
             <div
               onDragOver={(e) => e.preventDefault()}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
-              className="border-2 border-dashed border-slate-200 hover:border-blue-600 rounded-3xl p-8 sm:p-14 md:p-20 text-center cursor-pointer transition-colors bg-slate-50/70 hover:bg-blue-50/20 flex flex-col items-center justify-center space-y-4"
+              className="relative overflow-hidden rounded-[26px] sm:rounded-[32px] border border-slate-200/90 hover:border-blue-500 bg-white p-8 sm:p-14 md:p-16 text-center cursor-pointer transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.08)] flex flex-col items-center justify-center space-y-6 group"
+              style={{
+                backgroundImage: 'radial-gradient(rgba(100, 116, 139, 0.22) 1.3px, transparent 1.3px)',
+                backgroundSize: '20px 20px',
+                backgroundPosition: 'center',
+              }}
             >
               <input
                 ref={fileInputRef}
@@ -155,17 +160,31 @@ export function VideoEnhanceStudio({ onOpenPricing }: VideoEnhanceStudioProps) {
                 onChange={handleFileChange}
                 className="hidden"
               />
-              <div className="flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-2xl bg-white border border-slate-200 text-blue-600 shadow-md">
-                <Upload className="h-6 w-6 sm:h-7 sm:w-7 text-blue-600" />
-              </div>
-              <div className="space-y-1.5">
-                <p className="text-sm sm:text-lg font-bold text-slate-900 font-display">
+
+              {/* Text Description */}
+              <div className="relative z-10 space-y-1.5 font-display max-w-lg mx-auto">
+                <p className="text-base sm:text-lg md:text-xl font-bold text-slate-900 tracking-tight">
                   Drag and drop your MP4 video here, or{' '}
-                  <span className="underline text-blue-600 font-black">browse files</span>
+                  <span className="underline text-blue-600 font-black hover:text-blue-700 transition-colors">browse files</span>
                 </p>
-                <p className="text-xs sm:text-sm text-slate-500 font-semibold font-display">
+                <p className="text-xs sm:text-sm text-slate-500 font-semibold">
                   Supports MP4 video (up to 75 MB)
                 </p>
+              </div>
+
+              {/* Primary Upload Action Button */}
+              <div className="relative z-10 flex items-center justify-center pt-1">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    fileInputRef.current?.click();
+                  }}
+                  className="flex items-center gap-2 px-7 sm:px-8 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-blue-600/25 active:scale-95 transition-all font-display cursor-pointer"
+                >
+                  <Upload className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[2.5]" />
+                  <span>Upload</span>
+                </button>
               </div>
             </div>
           ) : (
