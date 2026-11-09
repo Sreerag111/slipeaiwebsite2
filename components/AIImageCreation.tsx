@@ -442,10 +442,10 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
             </div>
           ) : null}
 
-          {/* Bottom Prompt Bar: "Describe your image" with Aspect Ratio selector directly above */}
-          <div className="rounded-[24px] sm:rounded-[28px] border border-slate-200/90 bg-slate-50/60 p-4 sm:p-6 space-y-4">
+          {/* Aspect Ratio Selector & Prompt Input (directly inside the outer container) */}
+          <div className="space-y-4">
             {/* Aspect Ratio Selector (Above "Describe your image") */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-200/70 font-display">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-slate-200/80 font-display">
               <div className="flex items-center gap-2">
                 <span className="text-xs sm:text-sm font-bold text-slate-950 tracking-tight flex items-center gap-1.5">
                   <SlidersHorizontal className="w-3.5 h-3.5 text-blue-600" />
@@ -457,7 +457,7 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
               </div>
 
               {/* Functional Aspect Ratio Options */}
-              <div className="inline-flex items-center gap-1.5 p-1 bg-white border border-slate-200/90 rounded-2xl shadow-xs self-start sm:self-auto">
+              <div className="inline-flex items-center gap-1.5 p-1 bg-slate-100/90 border border-slate-200/80 rounded-2xl shadow-xs self-start sm:self-auto">
                 {/* 9:16 Ratio Button */}
                 <button
                   type="button"
@@ -465,7 +465,7 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
                   className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold font-display transition-all ${
                     aspectRatio === '9:16'
                       ? 'bg-blue-600 text-white shadow-sm ring-1 ring-blue-600'
-                      : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100'
+                      : 'text-slate-600 hover:text-slate-950 hover:bg-white/80'
                   }`}
                   title="9:16 Vertical Portrait (1024x1792) - Reels, Stories & Mobile Wallpaper"
                 >
@@ -483,7 +483,7 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
                   className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold font-display transition-all ${
                     aspectRatio === '16:9'
                       ? 'bg-blue-600 text-white shadow-sm ring-1 ring-blue-600'
-                      : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100'
+                      : 'text-slate-600 hover:text-slate-950 hover:bg-white/80'
                   }`}
                   title="16:9 Widescreen Landscape (1792x1024) - Cinematic, Banner & Desktop"
                 >
@@ -501,7 +501,7 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
                   className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold font-display transition-all ${
                     aspectRatio === '1:1'
                       ? 'bg-blue-600 text-white shadow-sm ring-1 ring-blue-600'
-                      : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100'
+                      : 'text-slate-600 hover:text-slate-950 hover:bg-white/80'
                   }`}
                   title="1:1 Square (1024x1024) - Profile Avatar & Square Post"
                 >
@@ -529,7 +529,7 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
                   }}
                   disabled={isGenerating}
                   placeholder={`Describe your idea in ${aspectRatio} ratio (e.g., A vintage cinematic portrait with warm golden hour lighting)...`}
-                  className="w-full bg-white border-2 border-slate-200 focus:border-blue-600 focus:ring-4 focus:ring-blue-500/10 px-4 sm:px-5 py-3.5 rounded-2xl text-xs sm:text-sm text-slate-950 font-display font-medium placeholder-slate-400 outline-none transition-all shadow-inner"
+                  className="w-full bg-slate-50/70 border-2 border-slate-200 focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-500/10 px-4 sm:px-5 py-3.5 rounded-2xl text-xs sm:text-sm text-slate-950 font-display font-medium placeholder-slate-400 outline-none transition-all shadow-inner"
                 />
               </div>
 
