@@ -11,11 +11,8 @@ import {
   Download,
   CreditCard,
   ChevronUp,
-  X,
   Search,
   PanelLeftClose,
-  Image as ImageIcon,
-  Video as VideoIcon,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -48,14 +45,16 @@ export function Sidebar({
     }
   }, []);
 
-  const handleNavClick = (sectionId: string, href: string) => {
+  const handleNavClick = (sectionId: string) => {
     onClose();
     if (onSelectSection) {
       onSelectSection(sectionId);
-    }
-    const targetEl = document.getElementById(sectionId);
-    if (targetEl) {
-      targetEl.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      if (sectionId === 'create') {
+        window.location.href = '/';
+      } else {
+        window.location.href = `/?tab=${sectionId}`;
+      }
     }
   };
 
@@ -64,39 +63,22 @@ export function Sidebar({
       id: 'create',
       label: 'AI Image Creation',
       icon: Sparkles,
-      href: '/',
       isCurrent: activeItem === 'create',
-      action: () => handleNavClick('create', '/'),
+      action: () => handleNavClick('create'),
     },
     {
-      id: 'enhancer',
+      id: 'enhance',
       label: 'Enhance Photos',
       icon: Wand2,
-      href: '/enhance',
-      isCurrent: activeItem === 'enhancer' || activeItem === 'enhance',
-      action: () => handleNavClick('enhancer', '/enhance'),
+      isCurrent: activeItem === 'enhance' || activeItem === 'enhancer',
+      action: () => handleNavClick('enhance'),
     },
     {
       id: 'video',
       label: 'Remaster Videos',
       icon: Film,
-      href: '/video',
       isCurrent: activeItem === 'video',
-      action: () => handleNavClick('video', '/video'),
-    },
-    {
-      id: 'image-studio',
-      label: 'Image Studio',
-      icon: ImageIcon,
-      href: '/enhance',
-      isCurrent: false,
-    },
-    {
-      id: 'video-studio',
-      label: 'Video Studio',
-      icon: VideoIcon,
-      href: '/video',
-      isCurrent: false,
+      action: () => handleNavClick('video'),
     },
   ];
 
@@ -120,19 +102,26 @@ export function Sidebar({
         {/* Top Area: Brand, Header icons & New Creation Button */}
         <div className="p-4 sm:p-5 space-y-4">
           <div className="flex items-center justify-between pb-1">
-            <Link href="/" className="flex items-center gap-2 group">
+            <button
+              type="button"
+              onClick={() => handleNavClick('create')}
+              className="flex items-center gap-2 group text-left"
+            >
               <span className="text-2xl font-black tracking-tight text-slate-950 group-hover:text-slate-700 transition-colors">
                 SlipeAI
               </span>
-            </Link>
+            </button>
 
             {/* Header Tool Icons (matching chat.v2.aifiesta.ai) */}
             <div className="flex items-center gap-1">
               <button
                 type="button"
                 onClick={() => {
-                  const input = document.querySelector<HTMLInputElement>('input[type="text"]');
-                  input?.focus();
+                  handleNavClick('create');
+                  setTimeout(() => {
+                    const input = document.querySelector<HTMLInputElement>('input[type="text"]');
+                    input?.focus();
+                  }, 100);
                 }}
                 className="p-1.5 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors"
                 title="Search / Prompt"
@@ -163,12 +152,14 @@ export function Sidebar({
           <button
             type="button"
             onClick={() => {
-              handleNavClick('create', '/');
-              const input = document.querySelector<HTMLInputElement>('input[type="text"]');
-              if (input) {
-                input.value = '';
-                input.focus();
-              }
+              handleNavClick('create');
+              setTimeout(() => {
+                const input = document.querySelector<HTMLInputElement>('input[type="text"]');
+                if (input) {
+                  input.value = '';
+                  input.focus();
+                }
+              }, 100);
             }}
             className="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-2xl bg-slate-100/90 hover:bg-slate-200/80 text-slate-950 font-extrabold text-xs sm:text-sm transition-all shadow-xs group font-display text-left cursor-pointer"
           >
@@ -178,41 +169,24 @@ export function Sidebar({
             <span>New Creation</span>
           </button>
 
-          {/* Main Navigation Links */}
-          <nav className="space-y-1 pt-1 font-display">
+          {/* Main Navigation Links: Enhance Photos, Remaster Videos, AI Image Creation */}
+          <nav className="space-y-1.5 pt-1 font-display">
             {navItems.map((item) => {
               const Icon = item.icon;
-              if (item.action) {
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={item.action}
-                    className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-[13px] font-bold transition-all text-left ${
-                      item.isCurrent
-                        ? 'bg-slate-950 text-white shadow-sm'
-                        : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/80'
-                    }`}
-                  >
-                    <Icon className={`w-4 h-4 ${item.isCurrent ? 'text-white' : 'text-slate-500'}`} />
-                    <span className="truncate">{item.label}</span>
-                  </button>
-                );
-              }
               return (
-                <Link
+                <button
                   key={item.id}
-                  href={item.href}
-                  onClick={onClose}
-                  className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-[13px] font-bold transition-all ${
+                  type="button"
+                  onClick={item.action}
+                  className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-[13px] font-bold transition-all text-left cursor-pointer ${
                     item.isCurrent
                       ? 'bg-slate-950 text-white shadow-sm'
                       : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/80'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${item.isCurrent ? 'text-white' : 'text-slate-500'}`} />
+                  <Icon className={`w-4 h-4 shrink-0 ${item.isCurrent ? 'text-white' : 'text-slate-500'}`} />
                   <span className="truncate">{item.label}</span>
-                </Link>
+                </button>
               );
             })}
           </nav>

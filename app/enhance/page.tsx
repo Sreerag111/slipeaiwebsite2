@@ -5,21 +5,10 @@ import { Sidebar } from '@/components/Sidebar';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { PaywallModal } from '@/components/PaywallModal';
-import { PhotoEnhanceStudio } from '@/components/PhotoEnhanceStudio';
-import { Loader2 } from 'lucide-react';
-
-function StudioLoading() {
-  return (
-    <div className="min-h-[600px] flex flex-col items-center justify-center p-8 space-y-4">
-      <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
-      <p className="text-sm font-bold text-slate-600">Loading Photo Enhancement Studio...</p>
-    </div>
-  );
-}
+import { PhotoEnhancer } from '@/components/PhotoEnhancer';
 
 export default function EnhancePage() {
   const [isPricingOpen, setIsPricingOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('enhancer');
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isDesktopSidebarCollapsed, setIsDesktopSidebarCollapsed] = useState(false);
 
@@ -40,7 +29,7 @@ export default function EnhancePage() {
         onClose={() => setIsMobileSidebarOpen(false)}
         onToggleCollapse={() => setIsDesktopSidebarCollapsed(!isDesktopSidebarCollapsed)}
         onOpenPricing={() => setIsPricingOpen(true)}
-        activeItem="enhancer"
+        activeItem="enhance"
       />
 
       {/* Main Content Area */}
@@ -53,15 +42,16 @@ export default function EnhancePage() {
           {/* Navigation */}
           <Navbar
             onOpenPricing={() => setIsPricingOpen(true)}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
+            activeTab="enhance"
+            setActiveTab={(tab) => {
+              if (tab === 'create') window.location.href = '/';
+              else if (tab === 'video') window.location.href = '/video';
+            }}
             onToggleSidebar={handleToggleSidebar}
           />
 
-          {/* Dedicated Photo Enhancement Studio */}
-          <Suspense fallback={<StudioLoading />}>
-            <PhotoEnhanceStudio onOpenPricing={() => setIsPricingOpen(true)} />
-          </Suspense>
+          {/* Enhance Photos with video showing containers + studio */}
+          <PhotoEnhancer onOpenPricing={() => setIsPricingOpen(true)} />
         </div>
 
         {/* Footer */}

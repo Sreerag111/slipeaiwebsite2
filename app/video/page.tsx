@@ -5,21 +5,10 @@ import { Sidebar } from '@/components/Sidebar';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { PaywallModal } from '@/components/PaywallModal';
-import { VideoEnhanceStudio } from '@/components/VideoEnhanceStudio';
-import { Loader2 } from 'lucide-react';
-
-function StudioLoading() {
-  return (
-    <div className="min-h-[600px] flex flex-col items-center justify-center p-8 space-y-4">
-      <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
-      <p className="text-sm font-bold text-slate-600">Loading Video Remaster Studio...</p>
-    </div>
-  );
-}
+import { VideoEnhancer } from '@/components/VideoEnhancer';
 
 export default function VideoPage() {
   const [isPricingOpen, setIsPricingOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('video');
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isDesktopSidebarCollapsed, setIsDesktopSidebarCollapsed] = useState(false);
 
@@ -53,15 +42,16 @@ export default function VideoPage() {
           {/* Navigation */}
           <Navbar
             onOpenPricing={() => setIsPricingOpen(true)}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
+            activeTab="video"
+            setActiveTab={(tab) => {
+              if (tab === 'create') window.location.href = '/';
+              else if (tab === 'enhance') window.location.href = '/enhance';
+            }}
             onToggleSidebar={handleToggleSidebar}
           />
 
-          {/* Dedicated Video Remaster Studio */}
-          <Suspense fallback={<StudioLoading />}>
-            <VideoEnhanceStudio onOpenPricing={() => setIsPricingOpen(true)} />
-          </Suspense>
+          {/* Remaster Videos with video showing containers + studio */}
+          <VideoEnhancer onOpenPricing={() => setIsPricingOpen(true)} />
         </div>
 
         {/* Footer */}

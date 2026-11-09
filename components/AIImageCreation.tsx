@@ -28,6 +28,7 @@ import { saveAs } from 'file-saver';
 
 interface AIImageCreationProps {
   onStartEnhancing?: () => void;
+  onStartRemasterVideo?: () => void;
 }
 
 export type AspectRatio = '9:16' | '16:9' | '1:1';
@@ -40,7 +41,10 @@ interface StylePreset {
   icon: React.ElementType;
 }
 
-export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
+export function AIImageCreation({
+  onStartEnhancing,
+  onStartRemasterVideo,
+}: AIImageCreationProps) {
   const [prompt, setPrompt] = useState('');
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>('9:16');
   const [generatedRatio, setGeneratedRatio] = useState<AspectRatio>('9:16');
@@ -380,9 +384,11 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
             <button
               type="button"
               onClick={() => {
-                const el = document.getElementById('video');
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-                else window.location.href = '/video';
+                if (onStartRemasterVideo) {
+                  onStartRemasterVideo();
+                } else {
+                  window.location.href = '/video';
+                }
               }}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200/90 hover:border-slate-300 text-xs font-bold text-slate-700 hover:text-slate-950 transition-all shadow-2xs font-display hover:scale-102 cursor-pointer"
             >
