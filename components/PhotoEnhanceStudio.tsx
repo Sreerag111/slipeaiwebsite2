@@ -279,10 +279,10 @@ export function PhotoEnhanceStudio({ onOpenPricing }: PhotoEnhanceStudioProps) {
                   </span>
                 )}
               </div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-950 tracking-tight">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-950 font-display tracking-tight">
                 {activeCategory.label}
               </h1>
-              <p className="text-xs sm:text-sm text-slate-600 font-semibold mt-1">
+              <p className="text-xs sm:text-sm text-slate-600 font-display font-medium mt-1">
                 {activeCategory.desc}
               </p>
             </div>
