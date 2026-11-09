@@ -33,14 +33,14 @@ export function Navbar({
           )}
         </div>
 
-        {/* Right Actions: Upgrade Pro & Get App */}
+        {/* Right Actions: Upgrade Now & Get App */}
         <div className="flex items-center gap-2 sm:gap-3">
           <button
             type="button"
             onClick={onOpenPricing}
             className="text-xs sm:text-sm font-bold px-3.5 sm:px-4 py-2 rounded-xl border border-slate-200 bg-white text-slate-900 hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm active:scale-95 cursor-pointer"
           >
-            Upgrade Pro
+            Upgrade Now
           </button>
 
           <a

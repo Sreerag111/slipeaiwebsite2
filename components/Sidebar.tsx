@@ -84,7 +84,7 @@ export function Sidebar({
     {
       id: 'audio',
       label: 'Enhance Audios',
-      badge: 'Coming Soon',
+      suffix: '(Coming Soon)',
       icon: AudioWaveform,
       isCurrent: activeItem === 'audio',
       action: () => handleNavClick('audio'),
@@ -174,19 +174,19 @@ export function Sidebar({
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <Icon className={`w-4 h-4 shrink-0 ${item.isCurrent ? 'text-white' : 'text-slate-500'}`} />
-                    <span className="truncate">{item.label}</span>
-                  </div>
-                  {item.badge && (
-                    <span
-                      className={`text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded-md shrink-0 ml-1.5 ${
-                        item.isCurrent
-                          ? 'bg-white/20 text-white'
-                          : 'bg-blue-50 text-blue-700 border border-blue-200'
-                      }`}
-                    >
-                      {item.badge}
+                    <span className="truncate">
+                      {item.label}
+                      {item.suffix && (
+                        <span
+                          className={`ml-1 text-[11px] font-medium tracking-normal ${
+                            item.isCurrent ? 'text-white/80' : 'text-slate-400'
+                          }`}
+                        >
+                          {item.suffix}
+                        </span>
+                      )}
                     </span>
-                  )}
+                  </div>
                 </button>
               );
             })}

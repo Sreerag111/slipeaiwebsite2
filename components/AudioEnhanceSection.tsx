@@ -6,10 +6,6 @@ import {
   Mic,
   Volume2,
   Sliders,
-  Sparkles,
-  Lock,
-  Radio,
-  Clock,
 } from 'lucide-react';
 
 export function AudioEnhanceSection() {
@@ -41,10 +37,9 @@ export function AudioEnhanceSection() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-2.5 font-display">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-900 text-xs font-bold shadow-2xs">
-            <Clock className="w-3.5 h-3.5 text-blue-600" />
-            <span>Coming Soon</span>
-          </div>
+          <span className="text-xs sm:text-sm font-bold text-blue-600 uppercase tracking-widest block">
+            Coming Soon
+          </span>
 
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-950 tracking-tight leading-tight">
             Enhance Audios
@@ -85,35 +80,6 @@ export function AudioEnhanceSection() {
               </div>
             );
           })}
-        </div>
-
-        {/* Disabled Upload Dropzone Workspace (Coming Soon notice) */}
-        <div className="rounded-[28px] sm:rounded-[36px] border border-slate-200/90 bg-white p-8 sm:p-14 md:p-16 text-center shadow-[0_8px_30px_rgba(0,0,0,0.06)] flex flex-col items-center justify-center space-y-5 font-display">
-          <div className="flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-3xl bg-blue-50/80 border border-blue-200 text-blue-600 shadow-md">
-            <AudioWaveform className="h-8 w-8 sm:h-10 sm:w-10 text-blue-600" />
-          </div>
-
-          <div className="space-y-2 max-w-lg mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold">
-              <Lock className="w-3.5 h-3.5 text-slate-500" />
-              <span>In Neural Model Training</span>
-            </div>
-            <h3 className="text-xl sm:text-2xl font-black text-slate-950 tracking-tight">
-              Audio Enhancement Engine Coming Soon
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
-              Our 48kHz audio super-resolution and real-time speech de-noising models are undergoing final GPU optimization. This section will be unlocked in an upcoming update.
-            </p>
-          </div>
-
-          <button
-            type="button"
-            disabled
-            className="flex items-center justify-center gap-2 px-8 py-3.5 rounded-2xl bg-slate-200 text-slate-500 font-bold text-xs uppercase tracking-wider cursor-not-allowed shadow-none"
-          >
-            <Clock className="w-4 h-4" />
-            <span>Coming Soon</span>
-          </button>
         </div>
       </div>
     </section>
