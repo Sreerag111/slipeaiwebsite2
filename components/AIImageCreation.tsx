@@ -1,14 +1,25 @@
 'use client';
 
-import React, { useState } from 'react';
-import Image from 'next/image';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   Sparkles,
   Download,
   RotateCcw,
   ArrowUpRight,
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
   Check,
   SlidersHorizontal,
+  Camera,
+  SunMedium,
+  Palette,
+  Layers,
+  Zap,
+  Image as ImageIcon,
+  Wand2,
+  Paintbrush,
+  PenTool,
 } from 'lucide-react';
 import { saveAs } from 'file-saver';
 
@@ -18,6 +29,14 @@ interface AIImageCreationProps {
 
 export type AspectRatio = '9:16' | '16:9' | '1:1';
 
+interface StylePreset {
+  label: string;
+  desc: string;
+  prompt: string;
+  img: string;
+  icon: React.ElementType;
+}
+
 export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
   const [prompt, setPrompt] = useState('');
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>('9:16');
@@ -26,38 +45,105 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
   const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
   const [lastPrompt, setLastPrompt] = useState<string>('');
 
-  const stylePresets = [
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const promptInputRef = useRef<HTMLInputElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const stylePresets: StylePreset[] = [
     {
-      label: 'Vintage 90s Camera',
+      label: "Vintage 90's Camera",
+      desc: 'Authentic 35mm film grain, warm nostalgic tones, and analog color.',
       prompt: 'A candid 1990s 35mm film photograph of a young artist in a sunlit loft, natural film grain, warm muted tones, subtle lens flare',
       img: '/assets/images/create_image_categories/nineties_camera.png',
+      icon: Camera,
     },
     {
-      label: 'Studio Photoshoot',
+      label: 'AI Photoshoot',
+      desc: 'High-end editorial fashion portrait with dramatic softbox studio lighting.',
       prompt: 'A high-end editorial fashion portrait, dramatic studio softbox lighting, ultra-sharp facial micro-texture, 85mm f/1.4 depth of field',
       img: '/assets/images/create_image_categories/photoshoot.png',
+      icon: Sparkles,
     },
     {
       label: 'Golden Hour Glow',
+      desc: 'Breathtaking sunset backlighting with cinematic amber rim light.',
       prompt: 'A breathtaking scenic portrait during golden hour sunset, rich amber backlight, cinematic rim lighting, photorealistic landscape in background',
       img: '/assets/images/create_image_categories/golden_effect.png',
+      icon: SunMedium,
     },
     {
       label: 'Archival Black & White',
+      desc: 'Timeless chiaroscuro monochrome portrait with deep shadows and contrast.',
       prompt: 'A timeless black and white archival portrait, dramatic chiaroscuro contrast, deep shadows, authentic analog monochrome texture',
       img: '/assets/images/create_image_categories/black_and_white.png',
+      icon: Palette,
     },
     {
       label: 'Aesthetic Collage',
+      desc: 'Modern editorial collage with bold typography and film borders.',
       prompt: 'An artistic aesthetic editorial collage featuring modern streetwear, bold typography overlays, film border aesthetics',
       img: '/assets/images/create_image_categories/aesthetic_collage.png',
+      icon: Layers,
     },
     {
       label: 'Korean Streetwear',
+      desc: 'Seoul neon reflections on wet pavement with modern oversized styling.',
       prompt: 'A stylish Korean fashion street photography shot in Seoul at dusk, neon reflection on wet pavement, modern oversized clothing, clean aesthetic',
       img: '/assets/images/create_image_categories/korean_streetwear.png',
+      icon: Zap,
+    },
+    {
+      label: 'Polaroid Film',
+      desc: 'Classic instant camera framing with soft pastel vintage tones.',
+      prompt: 'An authentic vintage instant Polaroid photo with retro frame, soft analog lens flare, warm pastel color temperature, nostalgic tone',
+      img: '/assets/images/create_image_categories/polaroid_frame.png',
+      icon: ImageIcon,
+    },
+    {
+      label: 'Y2K Retro Vibe',
+      desc: 'Futuristic 2000s cyber aesthetic with vibrant holographic colors.',
+      prompt: 'A vibrant Y2K cyber aesthetic photo, holographic chromatic styling, early 2000s futuristic fashion, glossy metallic highlights',
+      img: '/assets/images/create_image_categories/y2k_style.png',
+      icon: Wand2,
+    },
+    {
+      label: 'Anime & Cartoon',
+      desc: 'Vibrant 3D animated character styling with expressive features.',
+      prompt: 'A vibrant modern 3D anime cinematic character concept art, high-definition expressive eyes, Pixar-grade studio lighting, soft color grading',
+      img: '/assets/images/create_image_categories/cartoon_look.png',
+      icon: Paintbrush,
+    },
+    {
+      label: 'Fine Art Sketch',
+      desc: 'Hand-drawn graphite pencil drawing with cross-hatched shading.',
+      prompt: 'A masterful fine art charcoal and graphite pencil sketch, delicate cross-hatching, museum archival paper texture, artistic realism',
+      img: '/assets/images/create_image_categories/personality_sketch.png',
+      icon: PenTool,
     },
   ];
+
+  const checkScroll = () => {
+    if (!scrollContainerRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+    setCanScrollLeft(scrollLeft > 10);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+  };
+
+  useEffect(() => {
+    checkScroll();
+    window.addEventListener('resize', checkScroll);
+    return () => window.removeEventListener('resize', checkScroll);
+  }, []);
+
+  const handleScroll = (direction: 'left' | 'right') => {
+    if (!scrollContainerRef.current) return;
+    const scrollAmount = Math.min(scrollContainerRef.current.clientWidth * 0.8, 680);
+    scrollContainerRef.current.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth',
+    });
+  };
 
   const handleGenerate = async (customPrompt?: string) => {
     const textToUse = customPrompt || prompt;
@@ -132,19 +218,129 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
 
   return (
     <section id="create" className="py-16 sm:py-20 md:py-28 border-t border-slate-200/80 bg-[#F8FAFC]">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-16">
         {/* Section Header: Styled like Select Your Enhancement Category */}
-        <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3">
+        <div className="text-center max-w-3xl mx-auto space-y-3">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-950 font-display tracking-tight leading-tight">
             AI Image Creation
           </h2>
           <p className="text-sm sm:text-base md:text-lg text-slate-600 font-display font-medium max-w-2xl mx-auto px-2 leading-relaxed">
-            Describe your vision in words and generate photorealistic, high-resolution imagery.
+            Describe your vision in words or choose from curated styles to generate photorealistic imagery.
           </p>
         </div>
 
-        {/* Main Creation Card Container */}
-        <div className="rounded-[28px] sm:rounded-[32px] border border-slate-200/90 bg-white p-5 sm:p-8 md:p-10 shadow-[0_4px_24px_rgba(0,0,0,0.05)] space-y-6 sm:space-y-8">
+        {/* Style Presets Carousel (Vintage 90's, AI Photoshoot, and all styles styled like reference image) */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between px-1">
+            <div>
+              <h3 className="text-lg sm:text-xl font-extrabold text-slate-950 font-display tracking-tight">
+                Featured Styles & Presets
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 font-display font-medium">
+                Click any style to instantly preview and inspire your prompt
+              </p>
+            </div>
+          </div>
+
+          {/* Carousel Container with Circular Navigation Buttons */}
+          <div className="relative group/carousel">
+            {/* Left Arrow Button */}
+            {canScrollLeft && (
+              <button
+                type="button"
+                onClick={() => handleScroll('left')}
+                aria-label="Previous styles"
+                className="absolute -left-3 sm:-left-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white text-slate-900 border border-slate-200/90 shadow-xl flex items-center justify-center transition-all hover:scale-105 hover:bg-slate-50 active:scale-95"
+              >
+                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-slate-800" />
+              </button>
+            )}
+
+            {/* Right Arrow Button (matches circular button in reference image) */}
+            {canScrollRight && (
+              <button
+                type="button"
+                onClick={() => handleScroll('right')}
+                aria-label="Next styles"
+                className="absolute -right-3 sm:-right-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white text-slate-900 border border-slate-200/90 shadow-xl flex items-center justify-center transition-all hover:scale-105 hover:bg-slate-50 active:scale-95"
+              >
+                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-slate-800" />
+              </button>
+            )}
+
+            {/* Horizontal Scrollable Row of Style Cards (Clearly Visible Previews) */}
+            <div
+              ref={scrollContainerRef}
+              onScroll={checkScroll}
+              className="flex gap-4 sm:gap-6 overflow-x-auto scroll-smooth pb-6 pt-2 px-1 scrollbar-none snap-x snap-mandatory"
+            >
+              {stylePresets.map((style, idx) => {
+                const Icon = style.icon;
+                const isSelected = prompt === style.prompt;
+
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => {
+                      setPrompt(style.prompt);
+                      handleGenerate(style.prompt);
+                      promptInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }}
+                    className={`w-[280px] sm:w-[320px] md:w-[340px] shrink-0 snap-start flex flex-col p-3.5 sm:p-4 rounded-[24px] sm:rounded-[28px] bg-white border transition-all duration-300 active:scale-[0.98] group text-left ${
+                      isSelected
+                        ? 'border-blue-600 ring-2 ring-blue-500/20 shadow-[0_16px_36px_rgba(0,0,0,0.1)] scale-[1.01]'
+                        : 'border-slate-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.1)] hover:-translate-y-1.5'
+                    }`}
+                  >
+                    {/* Media Visual (Large, clearly visible preview image with rounded corners) */}
+                    <div className="relative w-full aspect-[16/11] sm:aspect-[4/3] rounded-[18px] sm:rounded-[22px] overflow-hidden bg-slate-100 mb-3.5 sm:mb-4 shadow-inner border border-slate-100">
+                      <img
+                        src={style.img}
+                        alt={style.label}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                        loading="eager"
+                      />
+
+                      {/* Hover indicator: "Try Style ->" */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3 pointer-events-none">
+                        <span className="text-[11px] font-bold text-white bg-blue-600/95 px-3 py-1 rounded-lg backdrop-blur-sm shadow-md flex items-center gap-1.5 font-display">
+                          <span>Try Style</span>
+                          <ArrowRight className="w-3 h-3" />
+                        </span>
+                      </div>
+
+                      {isSelected && (
+                        <div className="absolute top-3 right-3 bg-blue-600 text-white p-1 rounded-full shadow-md z-10">
+                          <Check className="h-3.5 w-3.5" />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Card Info: Icon + Title row & clean description */}
+                    <div className="space-y-1.5 flex-1 flex flex-col justify-between px-1 pb-1">
+                      <div className="flex items-center gap-2.5">
+                        <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-slate-100 text-slate-900 group-hover:bg-blue-600 group-hover:text-white transition-colors shrink-0 shadow-sm">
+                          <Icon className="w-4 h-4" />
+                        </div>
+                        <h4 className="text-base sm:text-lg font-bold text-slate-950 font-display tracking-tight group-hover:text-blue-700 transition-colors line-clamp-1">
+                          {style.label}
+                        </h4>
+                      </div>
+
+                      <p className="text-xs sm:text-[13px] text-slate-600 font-medium leading-relaxed font-display line-clamp-2">
+                        {style.desc}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Main Prompt Bar & Output Workspace Container */}
+        <div className="max-w-4xl mx-auto rounded-[28px] sm:rounded-[32px] border border-slate-200/90 bg-white p-5 sm:p-8 md:p-10 shadow-[0_4px_24px_rgba(0,0,0,0.05)] space-y-6 sm:space-y-8">
           {/* Top Bar (Shown when an image is generated to allow creating a new one) */}
           {generatedImageUrl && (
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -246,70 +442,6 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
             </div>
           ) : null}
 
-          {/* Popular Inspiration Styles (Click to try) */}
-          <div className="rounded-[24px] sm:rounded-[28px] border border-slate-200/90 bg-slate-50/60 p-4 sm:p-6 space-y-4">
-            <div>
-              <h3 className="text-base sm:text-lg font-bold text-slate-950 font-display tracking-tight">
-                Popular Inspiration Styles
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 font-display font-medium mt-0.5">
-                Click any style to generate instantly or inspire your description
-              </p>
-            </div>
-
-            {/* Responsive Grid: Cards styled like Select Your Enhancement Category */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-              {stylePresets.map((style, idx) => {
-                const isSelected = prompt === style.prompt;
-                return (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => {
-                      setPrompt(style.prompt);
-                      handleGenerate(style.prompt);
-                    }}
-                    className={`group flex flex-col p-2.5 sm:p-3 rounded-[20px] sm:rounded-[24px] border text-left transition-all duration-300 active:scale-[0.98] focus:outline-none ${
-                      isSelected
-                        ? 'border-blue-600 bg-blue-50/50 ring-2 ring-blue-500/20 shadow-md'
-                        : 'border-slate-200/90 bg-white hover:border-blue-500 hover:shadow-[0_12px_28px_rgba(0,0,0,0.08)] hover:-translate-y-1'
-                    }`}
-                  >
-                    {/* Media visual with rounded border */}
-                    <div className="relative aspect-[4/3] sm:aspect-[16/11] w-full rounded-[14px] sm:rounded-[18px] overflow-hidden border border-slate-100 mb-2.5 bg-slate-100 shadow-inner">
-                      <Image
-                        src={style.img}
-                        alt={style.label}
-                        fill
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-2 pointer-events-none">
-                        <span className="text-[10px] font-bold text-white bg-blue-600/95 px-2 py-0.5 rounded-md backdrop-blur-sm shadow-sm flex items-center gap-1 font-display">
-                          <Sparkles className="h-2.5 w-2.5" /> Try Style
-                        </span>
-                      </div>
-                      {isSelected && (
-                        <div className="absolute top-2 right-2 bg-blue-600 text-white p-1 rounded-full shadow-md">
-                          <Check className="h-3 w-3" />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Card Title & Hint */}
-                    <span className="text-xs sm:text-[13px] font-bold text-slate-950 font-display tracking-tight group-hover:text-blue-700 transition-colors line-clamp-1">
-                      {style.label}
-                    </span>
-                    <span className="text-[10px] sm:text-[11px] text-slate-500 font-display font-medium flex items-center justify-between gap-1 mt-0.5 group-hover:text-blue-600 transition-colors">
-                      <span>Click to try</span>
-                      <ArrowUpRight className="h-3 w-3 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
           {/* Bottom Prompt Bar: "Describe your image" with Aspect Ratio selector directly above */}
           <div className="rounded-[24px] sm:rounded-[28px] border border-slate-200/90 bg-slate-50/60 p-4 sm:p-6 space-y-4">
             {/* Aspect Ratio Selector (Above "Describe your image") */}
@@ -386,6 +518,7 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
             <div className="relative flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center">
               <div className="relative flex-1">
                 <input
+                  ref={promptInputRef}
                   type="text"
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
