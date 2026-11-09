@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
 import {
   Sparkles,
   Download,
@@ -10,6 +11,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Check,
+  Plus,
+  X,
   Camera,
   SunMedium,
   Palette,
@@ -19,6 +22,7 @@ import {
   Wand2,
   Paintbrush,
   PenTool,
+  Film,
 } from 'lucide-react';
 import { saveAs } from 'file-saver';
 
@@ -43,6 +47,11 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null);
   const [lastPrompt, setLastPrompt] = useState<string>('');
+
+  // Image Upload state for reference image
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [uploadedPreviewUrl, setUploadedPreviewUrl] = useState<string | null>(null);
+  const fileUploadInputRef = useRef<HTMLInputElement>(null);
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const promptInputRef = useRef<HTMLInputElement>(null);
@@ -144,6 +153,31 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
     });
   };
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setUploadedFile(file);
+      if (uploadedPreviewUrl) {
+        URL.revokeObjectURL(uploadedPreviewUrl);
+      }
+      setUploadedPreviewUrl(URL.createObjectURL(file));
+      if (!prompt.trim()) {
+        setPrompt(`Remaster and transform this photo in ${aspectRatio} ratio with realistic high-end texture`);
+      }
+    }
+  };
+
+  const handleRemoveUploadedFile = () => {
+    if (uploadedPreviewUrl) {
+      URL.revokeObjectURL(uploadedPreviewUrl);
+    }
+    setUploadedFile(null);
+    setUploadedPreviewUrl(null);
+    if (fileUploadInputRef.current) {
+      fileUploadInputRef.current.value = '';
+    }
+  };
+
   const handleGenerate = async (customPrompt?: string) => {
     const textToUse = customPrompt || prompt;
     if (!textToUse.trim()) return;
@@ -216,20 +250,297 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
       : 'aspect-square max-h-[560px] max-w-xl mx-auto';
 
   return (
-    <section id="create" className="py-16 sm:py-20 md:py-28 border-t border-slate-200/80 bg-[#F8FAFC]">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-16">
-        {/* Section Header: Styled like Select Your Enhancement Category */}
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-950 font-display tracking-tight leading-tight">
-            AI Image Creation
-          </h2>
-          <p className="text-sm sm:text-base md:text-lg text-slate-600 font-display font-medium max-w-2xl mx-auto px-2 leading-relaxed">
-            Describe your vision in words or choose from curated styles to generate photorealistic imagery.
+    <section id="create" className="pt-8 pb-16 sm:pt-12 sm:pb-20 md:pt-16 md:pb-28 bg-[#F8FAFC]">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
+        {/* Center Main Greeting Header: Styled exactly like reference image */}
+        <div className="text-center max-w-3xl mx-auto space-y-2">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-950 font-display tracking-tight leading-tight">
+            Hi Sreerag, how can I help you today?
+          </h1>
+          <p className="text-xs sm:text-sm md:text-base text-slate-500 font-display font-medium max-w-xl mx-auto px-2">
+            Describe your idea, upload a reference photo, or choose a style preset below.
           </p>
         </div>
 
-        {/* Style Presets Carousel (Vintage 90's, AI Photoshoot, and all styles styled like reference image) */}
-        <div className="space-y-4">
+        {/* Central Search / Image Creation Bar with '+' File Upload Option */}
+        <div className="max-w-3xl mx-auto w-full space-y-3">
+          <div className="relative rounded-full border border-slate-200/90 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.06)] px-2 sm:px-3 py-2 flex items-center gap-2 transition-all focus-within:border-blue-600 focus-within:ring-4 focus-within:ring-blue-500/10">
+            {/* '+' File Upload Button with 'More options' Tooltip (Matches reference image) */}
+            <div className="relative group/more shrink-0">
+              <input
+                ref={fileUploadInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+
+              <button
+                type="button"
+                onClick={() => fileUploadInputRef.current?.click()}
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-all active:scale-95 shadow-2xs"
+                aria-label="Upload photo or file"
+              >
+                <Plus className="w-4 h-4 sm:w-5 sm:h-5 text-slate-800" />
+              </button>
+
+              {/* Floating Tooltip: 'More options' (matches reference image) */}
+              <div className="absolute -top-9 left-1/2 -translate-x-1/2 opacity-0 group-hover/more:opacity-100 pointer-events-none transition-opacity duration-200 bg-white text-slate-900 border border-slate-200 shadow-md text-[11px] font-bold px-2.5 py-0.5 rounded-lg whitespace-nowrap font-display z-20">
+                <span>More options</span>
+              </div>
+            </div>
+
+            {/* Uploaded File Chip (if user selected a photo) */}
+            {uploadedPreviewUrl && (
+              <div className="inline-flex items-center gap-1.5 p-1 pr-2 rounded-full bg-blue-50 border border-blue-200 text-blue-950 shrink-0">
+                <img
+                  src={uploadedPreviewUrl}
+                  alt="Uploaded preview"
+                  className="w-6 h-6 rounded-full object-cover"
+                />
+                <span className="text-[11px] font-bold truncate max-w-[80px] sm:max-w-[120px] font-display">
+                  {uploadedFile?.name || 'Photo'}
+                </span>
+                <button
+                  type="button"
+                  onClick={handleRemoveUploadedFile}
+                  className="p-0.5 rounded-full hover:bg-blue-200 text-blue-700 transition-colors"
+                  aria-label="Remove uploaded photo"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+            )}
+
+            {/* Main Prompt Input Field */}
+            <input
+              ref={promptInputRef}
+              type="text"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !isGenerating) {
+                  handleGenerate();
+                }
+              }}
+              disabled={isGenerating}
+              placeholder={`Describe your idea in ${aspectRatio} ratio (e.g. Vintage 90s portrait)...`}
+              className="flex-1 min-w-0 bg-transparent border-none text-xs sm:text-sm text-slate-900 font-display font-medium placeholder-slate-400 focus:outline-none px-2"
+            />
+
+            {/* Aspect Ratio Selector Pills */}
+            <div className="inline-flex items-center gap-1 p-0.5 bg-slate-100/90 rounded-full border border-slate-200/80 shrink-0">
+              {(['9:16', '16:9', '1:1'] as AspectRatio[]).map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  onClick={() => setAspectRatio(r)}
+                  className={`px-2 sm:px-2.5 py-1 rounded-full text-[10.5px] sm:text-[11px] font-bold font-display transition-all ${
+                    aspectRatio === r
+                      ? 'bg-blue-600 text-white shadow-xs'
+                      : 'text-slate-600 hover:text-slate-950 hover:bg-white/80'
+                  }`}
+                >
+                  {r}
+                </button>
+              ))}
+            </div>
+
+            {/* Generate Action Button */}
+            <button
+              type="button"
+              onClick={() => handleGenerate()}
+              disabled={isGenerating || !prompt.trim()}
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-950 hover:bg-slate-800 disabled:bg-slate-300 text-white flex items-center justify-center transition-all shadow-sm active:scale-95 shrink-0 font-display"
+              aria-label="Generate Image"
+            >
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Quick Filter / Action Pills below input bar (Matches reference image) */}
+          <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 px-1">
+            <button
+              type="button"
+              onClick={() => {
+                if (onStartEnhancing) {
+                  onStartEnhancing();
+                } else {
+                  const el = document.getElementById('enhancer');
+                  if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  else window.location.href = '/enhance';
+                }
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200/90 hover:border-slate-300 text-xs font-bold text-slate-700 hover:text-slate-950 transition-all shadow-2xs font-display hover:scale-102 cursor-pointer"
+            >
+              <Wand2 className="w-3.5 h-3.5 text-blue-600" />
+              <span>Enhance Photos</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                const el = document.getElementById('video');
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+                else window.location.href = '/video';
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200/90 hover:border-slate-300 text-xs font-bold text-slate-700 hover:text-slate-950 transition-all shadow-2xs font-display hover:scale-102 cursor-pointer"
+            >
+              <Film className="w-3.5 h-3.5 text-blue-600" />
+              <span>Remaster Videos</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setPrompt(stylePresets[0].prompt);
+                handleGenerate(stylePresets[0].prompt);
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200/90 hover:border-slate-300 text-xs font-bold text-slate-700 hover:text-slate-950 transition-all shadow-2xs font-display hover:scale-102"
+            >
+              <Camera className="w-3.5 h-3.5 text-amber-600" />
+              <span>Vintage 90s</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setPrompt(stylePresets[1].prompt);
+                handleGenerate(stylePresets[1].prompt);
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200/90 hover:border-slate-300 text-xs font-bold text-slate-700 hover:text-slate-950 transition-all shadow-2xs font-display hover:scale-102"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-purple-600" />
+              <span>AI Photoshoot</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setPrompt(stylePresets[2].prompt);
+                handleGenerate(stylePresets[2].prompt);
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200/90 hover:border-slate-300 text-xs font-bold text-slate-700 hover:text-slate-950 transition-all shadow-2xs font-display hover:scale-102"
+            >
+              <SunMedium className="w-3.5 h-3.5 text-amber-500" />
+              <span>Golden Hour</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setPrompt(stylePresets[3].prompt);
+                handleGenerate(stylePresets[3].prompt);
+              }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200/90 hover:border-slate-300 text-xs font-bold text-slate-700 hover:text-slate-950 transition-all shadow-2xs font-display hover:scale-102"
+            >
+              <Palette className="w-3.5 h-3.5 text-slate-700" />
+              <span>Archival B&W</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Output & Generating Workspace Stage */}
+        {(isGenerating || generatedImageUrl) && (
+          <div className="max-w-4xl mx-auto rounded-[28px] sm:rounded-[32px] border border-slate-200/90 bg-white p-5 sm:p-8 md:p-10 shadow-[0_4px_24px_rgba(0,0,0,0.05)] space-y-6">
+            {generatedImageUrl && (
+              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                <span className="text-xs sm:text-sm font-bold text-slate-950 font-display">
+                  Generated Image
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setGeneratedImageUrl(null);
+                    setPrompt('');
+                  }}
+                  className="flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors font-display"
+                >
+                  <RotateCcw className="h-3.5 w-3.5" />
+                  <span>Create New Image</span>
+                </button>
+              </div>
+            )}
+
+            {isGenerating ? (
+              /* Generating animation stage */
+              <div className={`relative ${stageRatioClass} w-full rounded-[24px] sm:rounded-[28px] border border-slate-200/90 bg-white flex items-center justify-center p-6 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-300`}>
+                <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                  <div className="w-[200%] h-full -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-blue-500/10 to-transparent" />
+                </div>
+
+                <div className="relative z-10 flex items-baseline justify-center gap-1.5 font-display">
+                  <span className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-950 tracking-tight animate-pulse">
+                    Generating
+                  </span>
+                  <span className="inline-flex gap-1.5 items-center mb-1">
+                    <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-blue-600 animate-bounce [animation-delay:-0.3s]" />
+                    <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-blue-600 animate-bounce [animation-delay:-0.15s]" />
+                    <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-blue-600 animate-bounce" />
+                  </span>
+                </div>
+              </div>
+            ) : generatedImageUrl ? (
+              /* Generated Image Display */
+              <div className="space-y-6">
+                <div className={`relative ${outputRatioClass} w-full rounded-[24px] sm:rounded-[28px] overflow-hidden border border-slate-200/90 bg-slate-950 flex items-center justify-center shadow-xl transition-all duration-300`}>
+                  <img
+                    src={generatedImageUrl}
+                    alt={lastPrompt}
+                    className="max-h-full max-w-full object-contain"
+                  />
+
+                  {/* Ratio Badge */}
+                  <div className="absolute top-3 right-3 flex items-center bg-slate-950/85 backdrop-blur-md border border-white/10 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shadow-md font-display">
+                    <span className="text-blue-400">{generatedRatio}</span>
+                  </div>
+                </div>
+
+                {/* Prompt recap & action buttons */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-[22px] sm:rounded-[26px] bg-slate-50/80 border border-slate-200/80 font-display">
+                  <div className="space-y-0.5 max-w-xl">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                      Generated Description ({generatedRatio})
+                    </span>
+                    <p className="text-xs sm:text-sm font-bold text-slate-900 line-clamp-2">
+                      &ldquo;{lastPrompt}&rdquo;
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
+                    <button
+                      type="button"
+                      onClick={handleDownload}
+                      className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-white font-bold text-xs shadow-md transition-all active:scale-95"
+                    >
+                      <Download className="h-4 w-4" />
+                      <span>Download Image ({generatedRatio})</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (onStartEnhancing) {
+                          onStartEnhancing();
+                        } else {
+                          const el = document.getElementById('enhancer');
+                          if (el) el.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }}
+                      className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-blue-200 bg-blue-50 text-blue-900 hover:bg-blue-100 font-bold text-xs transition-all active:scale-95"
+                    >
+                      <span>Upscale in Slipe AI</span>
+                      <ArrowUpRight className="h-3.5 w-3.5 text-blue-700" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        )}
+
+        {/* Featured Styles & Presets Carousel (Clearly visible large cards) */}
+        <div className="space-y-4 pt-2">
           <div className="flex items-center justify-between px-1">
             <div>
               <h3 className="text-lg sm:text-xl font-extrabold text-slate-950 font-display tracking-tight">
@@ -243,7 +554,6 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
 
           {/* Carousel Container with Circular Navigation Buttons */}
           <div className="relative group/carousel">
-            {/* Left Arrow Button */}
             {canScrollLeft && (
               <button
                 type="button"
@@ -255,7 +565,6 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
               </button>
             )}
 
-            {/* Right Arrow Button (matches circular button in reference image) */}
             {canScrollRight && (
               <button
                 type="button"
@@ -267,7 +576,7 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
               </button>
             )}
 
-            {/* Horizontal Scrollable Row of Style Cards (Clearly Visible Previews) */}
+            {/* Horizontal Scrollable Row of Style Cards */}
             <div
               ref={scrollContainerRef}
               onScroll={checkScroll}
@@ -292,7 +601,7 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
                         : 'border-slate-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.1)] hover:-translate-y-1.5'
                     }`}
                   >
-                    {/* Media Visual (Large, clearly visible preview image with rounded corners) */}
+                    {/* Media Visual */}
                     <div className="relative w-full aspect-[16/11] sm:aspect-[4/3] rounded-[18px] sm:rounded-[22px] overflow-hidden bg-slate-100 mb-3.5 sm:mb-4 shadow-inner border border-slate-100">
                       <img
                         src={style.img}
@@ -316,7 +625,7 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
                       )}
                     </div>
 
-                    {/* Card Info: Icon + Title row & clean description */}
+                    {/* Card Info */}
                     <div className="space-y-1.5 flex-1 flex flex-col justify-between px-1 pb-1">
                       <div className="flex items-center gap-2.5">
                         <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-slate-100 text-slate-900 group-hover:bg-blue-600 group-hover:text-white transition-colors shrink-0 shadow-sm">
@@ -334,189 +643,6 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
                   </button>
                 );
               })}
-            </div>
-          </div>
-        </div>
-
-        {/* Main Prompt Bar & Output Workspace Container */}
-        <div className="max-w-4xl mx-auto rounded-[28px] sm:rounded-[32px] border border-slate-200/90 bg-white p-5 sm:p-8 md:p-10 shadow-[0_4px_24px_rgba(0,0,0,0.05)] space-y-6 sm:space-y-8">
-          {/* Top Bar (Shown when an image is generated to allow creating a new one) */}
-          {generatedImageUrl && (
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <span className="text-xs sm:text-sm font-bold text-slate-950 font-display">
-                Generated Image
-              </span>
-              <button
-                type="button"
-                onClick={() => {
-                  setGeneratedImageUrl(null);
-                  setPrompt('');
-                }}
-                className="flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors font-display"
-              >
-                <RotateCcw className="h-3.5 w-3.5" />
-                <span>Create New Image</span>
-              </button>
-            </div>
-          )}
-
-          {/* Central Output / Showcase Stage */}
-          {isGenerating ? (
-            /* Generating Stage: ONLY show Generating with animation */
-            <div className={`relative ${stageRatioClass} w-full rounded-[24px] sm:rounded-[28px] border border-slate-200/90 bg-white flex items-center justify-center p-6 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-300`}>
-              {/* Full container background shimmer sweep */}
-              <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                <div className="w-[200%] h-full -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-blue-500/10 to-transparent" />
-              </div>
-
-              {/* ONLY "Generating" with animation */}
-              <div className="relative z-10 flex items-baseline justify-center gap-1.5 font-display">
-                <span className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-950 tracking-tight animate-pulse">
-                  Generating
-                </span>
-                <span className="inline-flex gap-1.5 items-center mb-1">
-                  <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-blue-600 animate-bounce [animation-delay:-0.3s]" />
-                  <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-blue-600 animate-bounce [animation-delay:-0.15s]" />
-                  <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full bg-blue-600 animate-bounce" />
-                </span>
-              </div>
-            </div>
-          ) : generatedImageUrl ? (
-            /* Output Display Stage */
-            <div className="space-y-6">
-              <div className={`relative ${outputRatioClass} w-full rounded-[24px] sm:rounded-[28px] overflow-hidden border border-slate-200/90 bg-slate-950 flex items-center justify-center shadow-xl transition-all duration-300`}>
-                <img
-                  src={generatedImageUrl}
-                  alt={lastPrompt}
-                  className="max-h-full max-w-full object-contain"
-                />
-
-                {/* Ratio Badge */}
-                <div className="absolute top-3 right-3 flex items-center bg-slate-950/85 backdrop-blur-md border border-white/10 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shadow-md font-display">
-                  <span className="text-blue-400">{generatedRatio}</span>
-                </div>
-              </div>
-
-              {/* Prompt recap & action buttons */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-[22px] sm:rounded-[26px] bg-slate-50/80 border border-slate-200/80 font-display">
-                <div className="space-y-0.5 max-w-xl">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                    Generated Description ({generatedRatio})
-                  </span>
-                  <p className="text-xs sm:text-sm font-bold text-slate-900 line-clamp-2">
-                    &ldquo;{lastPrompt}&rdquo;
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
-                  <button
-                    type="button"
-                    onClick={handleDownload}
-                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-white font-bold text-xs shadow-md transition-all active:scale-95"
-                  >
-                    <Download className="h-4 w-4" />
-                    <span>Download Image ({generatedRatio})</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (onStartEnhancing) {
-                        onStartEnhancing();
-                      } else {
-                        const el = document.getElementById('enhancer');
-                        if (el) el.scrollIntoView({ behavior: 'smooth' });
-                      }
-                    }}
-                    className="flex-1 sm:flex-none flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-blue-200 bg-blue-50 text-blue-900 hover:bg-blue-100 font-bold text-xs transition-all active:scale-95"
-                  >
-                    <span>Upscale in Slipe AI</span>
-                    <ArrowUpRight className="h-3.5 w-3.5 text-blue-700" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          ) : null}
-
-          {/* Aspect Ratio Selector & Prompt Input (directly inside the outer container) */}
-          <div className="space-y-4">
-            {/* Aspect Ratio Options directly above prompt */}
-            <div className="flex items-center pb-2.5 border-b border-slate-200/80">
-              <div className="inline-flex items-center gap-1.5 p-1 bg-slate-100/90 border border-slate-200/80 rounded-2xl shadow-xs">
-                {/* 9:16 Ratio Button */}
-                <button
-                  type="button"
-                  onClick={() => setAspectRatio('9:16')}
-                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold font-display transition-all ${
-                    aspectRatio === '9:16'
-                      ? 'bg-blue-600 text-white shadow-sm ring-1 ring-blue-600'
-                      : 'text-slate-600 hover:text-slate-950 hover:bg-white/80'
-                  }`}
-                  title="9:16 Ratio"
-                >
-                  <span className="inline-block w-2.5 h-4 border-2 border-current rounded-[2px]" />
-                  <span>9:16</span>
-                </button>
-
-                {/* 16:9 Ratio Button */}
-                <button
-                  type="button"
-                  onClick={() => setAspectRatio('16:9')}
-                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold font-display transition-all ${
-                    aspectRatio === '16:9'
-                      ? 'bg-blue-600 text-white shadow-sm ring-1 ring-blue-600'
-                      : 'text-slate-600 hover:text-slate-950 hover:bg-white/80'
-                  }`}
-                  title="16:9 Ratio"
-                >
-                  <span className="inline-block w-4 h-2.5 border-2 border-current rounded-[2px]" />
-                  <span>16:9</span>
-                </button>
-
-                {/* 1:1 Ratio Button */}
-                <button
-                  type="button"
-                  onClick={() => setAspectRatio('1:1')}
-                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold font-display transition-all ${
-                    aspectRatio === '1:1'
-                      ? 'bg-blue-600 text-white shadow-sm ring-1 ring-blue-600'
-                      : 'text-slate-600 hover:text-slate-950 hover:bg-white/80'
-                  }`}
-                  title="1:1 Ratio"
-                >
-                  <span className="inline-block w-3 h-3 border-2 border-current rounded-[2px]" />
-                  <span>1:1</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Prompt input row: "Describe your image" */}
-            <div className="relative flex flex-col sm:flex-row gap-2.5 items-stretch sm:items-center">
-              <div className="relative flex-1">
-                <input
-                  ref={promptInputRef}
-                  type="text"
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !isGenerating) {
-                      handleGenerate();
-                    }
-                  }}
-                  disabled={isGenerating}
-                  placeholder={`Describe your idea in ${aspectRatio} ratio (e.g., A vintage cinematic portrait with warm golden hour lighting)...`}
-                  className="w-full bg-slate-50/70 border-2 border-slate-200 focus:bg-white focus:border-blue-600 focus:ring-4 focus:ring-blue-500/10 px-4 sm:px-5 py-3.5 rounded-2xl text-xs sm:text-sm text-slate-950 font-display font-medium placeholder-slate-400 outline-none transition-all shadow-inner"
-                />
-              </div>
-
-              <button
-                type="button"
-                onClick={() => handleGenerate()}
-                disabled={isGenerating || !prompt.trim()}
-                className="flex items-center justify-center px-6 sm:px-8 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-extrabold font-display text-xs sm:text-sm uppercase tracking-wider shadow-md hover:shadow-lg disabled:shadow-none transition-all active:scale-95 shrink-0"
-              >
-                <span>{isGenerating ? 'Generating...' : `Generate ${aspectRatio}`}</span>
-              </button>
             </div>
           </div>
         </div>

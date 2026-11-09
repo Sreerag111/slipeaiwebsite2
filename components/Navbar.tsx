@@ -2,32 +2,54 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X, Download } from 'lucide-react';
+import { Menu, X, Download, PanelLeft } from 'lucide-react';
 
 interface NavbarProps {
   onOpenPricing?: () => void;
   activeTab?: string;
   setActiveTab?: (tab: string) => void;
+  onToggleSidebar?: () => void;
+  isSidebarOpen?: boolean;
 }
 
-export function Navbar({ onOpenPricing, activeTab, setActiveTab }: NavbarProps) {
+export function Navbar({
+  onOpenPricing,
+  activeTab,
+  setActiveTab,
+  onToggleSidebar,
+}: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
+    { id: 'create', label: 'AI Image Creation' },
     { id: 'enhancer', label: 'Enhance Photos' },
     { id: 'video', label: 'Remaster Videos' },
-    { id: 'create', label: 'AI Image Creation' },
   ];
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/85 backdrop-blur-md transition-colors">
       <div className="mx-auto flex h-16 sm:h-18 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Top left SlipeAI with AI bold like Slipe, without Web & Mobile Suite */}
-        <Link href="/" className="flex items-center group py-1">
-          <span className="text-2xl sm:text-3xl font-black tracking-tight text-slate-950 group-hover:text-slate-700 transition-colors">
-            SlipeAI
-          </span>
-        </Link>
+        <div className="flex items-center gap-3">
+          {/* Sidebar Toggle Button */}
+          {onToggleSidebar && (
+            <button
+              type="button"
+              onClick={onToggleSidebar}
+              className="p-2 rounded-xl text-slate-600 hover:text-slate-950 hover:bg-slate-100 transition-colors focus:outline-none"
+              aria-label="Toggle Sidebar"
+              title="Toggle Sidebar"
+            >
+              <PanelLeft className="w-5 h-5 text-slate-800" />
+            </button>
+          )}
+
+          {/* SlipeAI Brand Logo */}
+          <Link href="/" className="flex items-center group py-1">
+            <span className="text-2xl sm:text-3xl font-black tracking-tight text-slate-950 group-hover:text-slate-700 transition-colors">
+              SlipeAI
+            </span>
+          </Link>
+        </div>
 
         {/* Desktop / Tablet Nav */}
         <nav className="hidden md:flex items-center gap-1 bg-slate-100/80 p-1 rounded-full border border-slate-200/80 shadow-inner">
@@ -80,13 +102,15 @@ export function Navbar({ onOpenPricing, activeTab, setActiveTab }: NavbarProps) 
         </div>
 
         {/* Mobile menu toggle */}
-        <button
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 text-slate-600 hover:text-slate-950 transition-colors focus:outline-none"
-          aria-label="Toggle Menu"
-        >
-          {mobileMenuOpen ? <X className="h-6 w-6 text-slate-900" /> : <Menu className="h-6 w-6 text-slate-900" />}
-        </button>
+        <div className="flex md:hidden items-center gap-1">
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 text-slate-600 hover:text-slate-950 transition-colors focus:outline-none"
+            aria-label="Toggle Menu"
+          >
+            {mobileMenuOpen ? <X className="h-6 w-6 text-slate-900" /> : <Menu className="h-6 w-6 text-slate-900" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Menu Dropdown */}
