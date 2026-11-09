@@ -131,32 +131,33 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
       : 'aspect-square max-h-[560px] max-w-xl mx-auto';
 
   return (
-    <section id="create" className="py-14 sm:py-20 md:py-28 border-t border-slate-200/80 bg-[#F8FAFC]">
+    <section id="create" className="py-16 sm:py-20 md:py-28 border-t border-slate-200/80 bg-[#F8FAFC]">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+        {/* Section Header: Styled like Select Your Enhancement Category */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14 space-y-3">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-slate-950 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-950 font-display tracking-tight leading-tight">
             AI Image Creation
           </h2>
-          <p className="text-xs sm:text-sm md:text-base text-slate-600 font-semibold max-w-2xl mx-auto px-2">
+          <p className="text-sm sm:text-base md:text-lg text-slate-600 font-display font-medium max-w-2xl mx-auto px-2 leading-relaxed">
             Describe your vision in words and generate photorealistic, high-resolution imagery.
           </p>
         </div>
 
-        {/* Main Creation Card */}
-        <div className="rounded-3xl border border-slate-200/90 bg-white p-4 sm:p-7 md:p-9 container-shade-xl space-y-6 sm:space-y-8">
+        {/* Main Creation Card Container */}
+        <div className="rounded-[28px] sm:rounded-[32px] border border-slate-200/90 bg-white p-5 sm:p-8 md:p-10 shadow-[0_4px_24px_rgba(0,0,0,0.05)] space-y-6 sm:space-y-8">
           {/* Top Bar (Shown when an image is generated to allow creating a new one) */}
           {generatedImageUrl && (
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <span className="text-xs sm:text-sm font-bold text-slate-900">
+              <span className="text-xs sm:text-sm font-bold text-slate-950 font-display">
                 Generated Image
               </span>
               <button
+                type="button"
                 onClick={() => {
                   setGeneratedImageUrl(null);
                   setPrompt('');
                 }}
-                className="flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors"
+                className="flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-800 transition-colors font-display"
               >
                 <RotateCcw className="h-3.5 w-3.5" />
                 <span>Create New Image</span>
@@ -167,15 +168,15 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
           {/* Central Output / Showcase Stage */}
           {isGenerating ? (
             /* Generating Stage: ONLY show Generating with animation */
-            <div className={`relative ${stageRatioClass} w-full rounded-2xl border border-slate-200 bg-slate-50/90 flex items-center justify-center p-6 overflow-hidden container-shade transition-all duration-300`}>
+            <div className={`relative ${stageRatioClass} w-full rounded-[24px] sm:rounded-[28px] border border-slate-200/90 bg-white flex items-center justify-center p-6 overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.05)] transition-all duration-300`}>
               {/* Full container background shimmer sweep */}
               <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <div className="w-[200%] h-full -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-blue-500/10 to-transparent" />
               </div>
 
               {/* ONLY "Generating" with animation */}
-              <div className="relative z-10 flex items-baseline justify-center gap-1.5">
-                <span className="text-3xl sm:text-4xl md:text-5xl font-black text-slate-950 tracking-tight animate-pulse">
+              <div className="relative z-10 flex items-baseline justify-center gap-1.5 font-display">
+                <span className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-950 tracking-tight animate-pulse">
                   Generating
                 </span>
                 <span className="inline-flex gap-1.5 items-center mb-1">
@@ -188,7 +189,7 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
           ) : generatedImageUrl ? (
             /* Output Display Stage */
             <div className="space-y-6">
-              <div className={`relative ${outputRatioClass} w-full rounded-2xl overflow-hidden border border-slate-200 bg-slate-950 flex items-center justify-center container-shade-lg group shadow-xl transition-all duration-300`}>
+              <div className={`relative ${outputRatioClass} w-full rounded-[24px] sm:rounded-[28px] overflow-hidden border border-slate-200/90 bg-slate-950 flex items-center justify-center shadow-xl transition-all duration-300`}>
                 <img
                   src={generatedImageUrl}
                   alt={lastPrompt}
@@ -196,18 +197,18 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
                 />
 
                 {/* Ratio & Model Badge */}
-                <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-slate-950/85 backdrop-blur-md border border-white/10 text-white text-[11px] font-black px-2.5 py-1 rounded-lg shadow-md">
+                <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-slate-950/85 backdrop-blur-md border border-white/10 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shadow-md font-display">
                   <span className="text-blue-400">{generatedRatio}</span>
-                  <span className="text-slate-400 font-semibold text-[10px]">
+                  <span className="text-slate-400 font-medium text-[10px]">
                     {generatedRatio === '9:16' ? 'Portrait' : generatedRatio === '16:9' ? 'Landscape' : 'Square'}
                   </span>
                 </div>
               </div>
 
               {/* Prompt recap & action buttons */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 sm:p-5 rounded-[22px] sm:rounded-[26px] bg-slate-50/80 border border-slate-200/80 font-display">
                 <div className="space-y-0.5 max-w-xl">
-                  <span className="text-[10px] font-black uppercase tracking-wider text-slate-500">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
                     Generated Description ({generatedRatio})
                   </span>
                   <p className="text-xs sm:text-sm font-bold text-slate-900 line-clamp-2">
@@ -217,14 +218,16 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
 
                 <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
                   <button
+                    type="button"
                     onClick={handleDownload}
-                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md transition-all active:scale-95"
+                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-slate-950 hover:bg-slate-800 text-white font-bold text-xs shadow-md transition-all active:scale-95"
                   >
                     <Download className="h-4 w-4" />
                     <span>Download Image ({generatedRatio})</span>
                   </button>
 
                   <button
+                    type="button"
                     onClick={() => {
                       if (onStartEnhancing) {
                         onStartEnhancing();
@@ -244,17 +247,17 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
           ) : null}
 
           {/* Popular Inspiration Styles (Click to try) */}
-          <div className="rounded-3xl border border-slate-200/80 bg-slate-50/50 p-4 sm:p-6 container-shade-sm space-y-3.5">
+          <div className="rounded-[24px] sm:rounded-[28px] border border-slate-200/90 bg-slate-50/60 p-4 sm:p-6 space-y-4">
             <div>
-              <h3 className="text-xs sm:text-sm font-bold text-slate-900 tracking-tight">
+              <h3 className="text-base sm:text-lg font-bold text-slate-950 font-display tracking-tight">
                 Popular Inspiration Styles
               </h3>
-              <p className="text-[11px] sm:text-xs text-slate-500 font-medium">
+              <p className="text-xs sm:text-sm text-slate-600 font-display font-medium mt-0.5">
                 Click any style to generate instantly or inspire your description
               </p>
             </div>
 
-            {/* Responsive Grid: 2 cols on mobile, 3 cols on tablet, 6 cols on laptop/desktop */}
+            {/* Responsive Grid: Cards styled like Select Your Enhancement Category */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
               {stylePresets.map((style, idx) => {
                 const isSelected = prompt === style.prompt;
@@ -266,22 +269,23 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
                       setPrompt(style.prompt);
                       handleGenerate(style.prompt);
                     }}
-                    className={`group flex flex-col p-2.5 sm:p-3 rounded-2xl border text-left transition-all duration-300 active:scale-[0.98] focus:outline-none ${
+                    className={`group flex flex-col p-2.5 sm:p-3 rounded-[20px] sm:rounded-[24px] border text-left transition-all duration-300 active:scale-[0.98] focus:outline-none ${
                       isSelected
-                        ? 'border-blue-600 bg-blue-50/40 ring-2 ring-blue-500/20 container-shade-md'
-                        : 'border-slate-200/90 bg-white hover:border-blue-500 hover:bg-blue-50/20 container-shade-sm hover:container-shade hover:-translate-y-1'
+                        ? 'border-blue-600 bg-blue-50/50 ring-2 ring-blue-500/20 shadow-md'
+                        : 'border-slate-200/90 bg-white hover:border-blue-500 hover:shadow-[0_12px_28px_rgba(0,0,0,0.08)] hover:-translate-y-1'
                     }`}
                   >
-                    <div className="relative aspect-square w-full rounded-xl overflow-hidden border border-slate-100 mb-2.5 bg-slate-100 shadow-inner">
+                    {/* Media visual with rounded border */}
+                    <div className="relative aspect-[4/3] sm:aspect-[16/11] w-full rounded-[14px] sm:rounded-[18px] overflow-hidden border border-slate-100 mb-2.5 bg-slate-100 shadow-inner">
                       <Image
                         src={style.img}
                         alt={style.label}
                         fill
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
-                        className="object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-slate-950/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-2 pointer-events-none">
-                        <span className="text-[10px] font-bold text-white bg-blue-600/95 px-2 py-0.5 rounded-md backdrop-blur-sm shadow-sm flex items-center gap-1">
+                        <span className="text-[10px] font-bold text-white bg-blue-600/95 px-2 py-0.5 rounded-md backdrop-blur-sm shadow-sm flex items-center gap-1 font-display">
                           <Sparkles className="h-2.5 w-2.5" /> Try Style
                         </span>
                       </div>
@@ -291,12 +295,14 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
                         </div>
                       )}
                     </div>
-                    <span className="text-xs sm:text-[13px] font-bold text-slate-900 group-hover:text-blue-700 transition-colors line-clamp-1">
+
+                    {/* Card Title & Hint */}
+                    <span className="text-xs sm:text-[13px] font-bold text-slate-950 font-display tracking-tight group-hover:text-blue-700 transition-colors line-clamp-1">
                       {style.label}
                     </span>
-                    <span className="text-[10px] sm:text-[11px] text-slate-500 font-semibold flex items-center justify-between gap-1 mt-0.5 group-hover:text-blue-600 transition-colors">
+                    <span className="text-[10px] sm:text-[11px] text-slate-500 font-display font-medium flex items-center justify-between gap-1 mt-0.5 group-hover:text-blue-600 transition-colors">
                       <span>Click to try</span>
-                      <ArrowUpRight className="h-3.5 w-3.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
+                      <ArrowUpRight className="h-3 w-3 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
                     </span>
                   </button>
                 );
@@ -305,26 +311,26 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
           </div>
 
           {/* Bottom Prompt Bar: "Describe your image" with Aspect Ratio selector directly above */}
-          <div className="rounded-3xl border border-slate-200/80 bg-slate-50/60 p-4 sm:p-5 container-shade-sm space-y-3.5">
+          <div className="rounded-[24px] sm:rounded-[28px] border border-slate-200/90 bg-slate-50/60 p-4 sm:p-6 space-y-4">
             {/* Aspect Ratio Selector (Above "Describe your image") */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-200/70">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2.5 border-b border-slate-200/70 font-display">
               <div className="flex items-center gap-2">
-                <span className="text-xs sm:text-sm font-black text-slate-950 tracking-tight flex items-center gap-1.5">
+                <span className="text-xs sm:text-sm font-bold text-slate-950 tracking-tight flex items-center gap-1.5">
                   <SlidersHorizontal className="w-3.5 h-3.5 text-blue-600" />
                   Select Aspect Ratio:
                 </span>
-                <span className="text-[11px] text-slate-500 font-medium hidden sm:inline">
-                  (Choose 9:16 or 16:9 format)
+                <span className="text-xs text-slate-500 font-medium hidden sm:inline">
+                  (Choose 9:16 vertical or 16:9 widescreen format)
                 </span>
               </div>
 
               {/* Functional Aspect Ratio Options */}
-              <div className="inline-flex items-center gap-1.5 p-1 bg-white border border-slate-200/90 rounded-2xl shadow-sm self-start sm:self-auto">
+              <div className="inline-flex items-center gap-1.5 p-1 bg-white border border-slate-200/90 rounded-2xl shadow-xs self-start sm:self-auto">
                 {/* 9:16 Ratio Button */}
                 <button
                   type="button"
                   onClick={() => setAspectRatio('9:16')}
-                  className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold font-display transition-all ${
                     aspectRatio === '9:16'
                       ? 'bg-blue-600 text-white shadow-sm ring-1 ring-blue-600'
                       : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100'
@@ -342,7 +348,7 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
                 <button
                   type="button"
                   onClick={() => setAspectRatio('16:9')}
-                  className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold font-display transition-all ${
                     aspectRatio === '16:9'
                       ? 'bg-blue-600 text-white shadow-sm ring-1 ring-blue-600'
                       : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100'
@@ -360,7 +366,7 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
                 <button
                   type="button"
                   onClick={() => setAspectRatio('1:1')}
-                  className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                  className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold font-display transition-all ${
                     aspectRatio === '1:1'
                       ? 'bg-blue-600 text-white shadow-sm ring-1 ring-blue-600'
                       : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100'
@@ -389,8 +395,8 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
                     }
                   }}
                   disabled={isGenerating}
-                  placeholder={`Describe your image in ${aspectRatio} ratio (e.g., A vintage cinematic portrait with warm golden hour lighting)...`}
-                  className="w-full bg-white border-2 border-slate-200 focus:border-blue-600 focus:ring-4 focus:ring-blue-500/10 px-4 sm:px-5 py-3.5 rounded-2xl text-xs sm:text-sm text-slate-950 font-medium placeholder-slate-400 outline-none transition-all shadow-inner"
+                  placeholder={`Describe your idea in ${aspectRatio} ratio (e.g., A vintage cinematic portrait with warm golden hour lighting)...`}
+                  className="w-full bg-white border-2 border-slate-200 focus:border-blue-600 focus:ring-4 focus:ring-blue-500/10 px-4 sm:px-5 py-3.5 rounded-2xl text-xs sm:text-sm text-slate-950 font-display font-medium placeholder-slate-400 outline-none transition-all shadow-inner"
                 />
               </div>
 
@@ -398,7 +404,7 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
                 type="button"
                 onClick={() => handleGenerate()}
                 disabled={isGenerating || !prompt.trim()}
-                className="flex items-center justify-center px-6 sm:px-8 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-black text-xs sm:text-sm uppercase tracking-wider shadow-md hover:shadow-lg disabled:shadow-none transition-all active:scale-95 shrink-0"
+                className="flex items-center justify-center px-6 sm:px-8 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-extrabold font-display text-xs sm:text-sm uppercase tracking-wider shadow-md hover:shadow-lg disabled:shadow-none transition-all active:scale-95 shrink-0"
               >
                 <span>{isGenerating ? 'Generating...' : `Generate ${aspectRatio}`}</span>
               </button>
