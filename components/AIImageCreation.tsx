@@ -10,7 +10,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Check,
-  SlidersHorizontal,
   Camera,
   SunMedium,
   Palette,
@@ -392,12 +391,9 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
                   className="max-h-full max-w-full object-contain"
                 />
 
-                {/* Ratio & Model Badge */}
-                <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-slate-950/85 backdrop-blur-md border border-white/10 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shadow-md font-display">
+                {/* Ratio Badge */}
+                <div className="absolute top-3 right-3 flex items-center bg-slate-950/85 backdrop-blur-md border border-white/10 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg shadow-md font-display">
                   <span className="text-blue-400">{generatedRatio}</span>
-                  <span className="text-slate-400 font-medium text-[10px]">
-                    {generatedRatio === '9:16' ? 'Portrait' : generatedRatio === '16:9' ? 'Landscape' : 'Square'}
-                  </span>
                 </div>
               </div>
 
@@ -444,72 +440,52 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
 
           {/* Aspect Ratio Selector & Prompt Input (directly inside the outer container) */}
           <div className="space-y-4">
-            {/* Aspect Ratio Selector (Above "Describe your image") */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-slate-200/80 font-display">
-              <div className="flex items-center gap-2">
-                <span className="text-xs sm:text-sm font-bold text-slate-950 tracking-tight flex items-center gap-1.5">
-                  <SlidersHorizontal className="w-3.5 h-3.5 text-blue-600" />
-                  Select Aspect Ratio:
-                </span>
-                <span className="text-xs text-slate-500 font-medium hidden sm:inline">
-                  (Choose 9:16 vertical or 16:9 widescreen format)
-                </span>
-              </div>
-
-              {/* Functional Aspect Ratio Options */}
-              <div className="inline-flex items-center gap-1.5 p-1 bg-slate-100/90 border border-slate-200/80 rounded-2xl shadow-xs self-start sm:self-auto">
+            {/* Aspect Ratio Options directly above prompt */}
+            <div className="flex items-center pb-2.5 border-b border-slate-200/80">
+              <div className="inline-flex items-center gap-1.5 p-1 bg-slate-100/90 border border-slate-200/80 rounded-2xl shadow-xs">
                 {/* 9:16 Ratio Button */}
                 <button
                   type="button"
                   onClick={() => setAspectRatio('9:16')}
-                  className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold font-display transition-all ${
+                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold font-display transition-all ${
                     aspectRatio === '9:16'
                       ? 'bg-blue-600 text-white shadow-sm ring-1 ring-blue-600'
                       : 'text-slate-600 hover:text-slate-950 hover:bg-white/80'
                   }`}
-                  title="9:16 Vertical Portrait (1024x1792) - Reels, Stories & Mobile Wallpaper"
+                  title="9:16 Ratio"
                 >
                   <span className="inline-block w-2.5 h-4 border-2 border-current rounded-[2px]" />
                   <span>9:16</span>
-                  <span className={`text-[10px] uppercase font-semibold hidden sm:inline ${aspectRatio === '9:16' ? 'text-blue-100' : 'text-slate-400'}`}>
-                    Portrait
-                  </span>
                 </button>
 
                 {/* 16:9 Ratio Button */}
                 <button
                   type="button"
                   onClick={() => setAspectRatio('16:9')}
-                  className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold font-display transition-all ${
+                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold font-display transition-all ${
                     aspectRatio === '16:9'
                       ? 'bg-blue-600 text-white shadow-sm ring-1 ring-blue-600'
                       : 'text-slate-600 hover:text-slate-950 hover:bg-white/80'
                   }`}
-                  title="16:9 Widescreen Landscape (1792x1024) - Cinematic, Banner & Desktop"
+                  title="16:9 Ratio"
                 >
                   <span className="inline-block w-4 h-2.5 border-2 border-current rounded-[2px]" />
                   <span>16:9</span>
-                  <span className={`text-[10px] uppercase font-semibold hidden sm:inline ${aspectRatio === '16:9' ? 'text-blue-100' : 'text-slate-400'}`}>
-                    Landscape
-                  </span>
                 </button>
 
                 {/* 1:1 Ratio Button */}
                 <button
                   type="button"
                   onClick={() => setAspectRatio('1:1')}
-                  className={`flex items-center gap-2 px-3 sm:px-3.5 py-1.5 rounded-xl text-xs font-bold font-display transition-all ${
+                  className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold font-display transition-all ${
                     aspectRatio === '1:1'
                       ? 'bg-blue-600 text-white shadow-sm ring-1 ring-blue-600'
                       : 'text-slate-600 hover:text-slate-950 hover:bg-white/80'
                   }`}
-                  title="1:1 Square (1024x1024) - Profile Avatar & Square Post"
+                  title="1:1 Ratio"
                 >
                   <span className="inline-block w-3 h-3 border-2 border-current rounded-[2px]" />
                   <span>1:1</span>
-                  <span className={`text-[10px] uppercase font-semibold hidden sm:inline ${aspectRatio === '1:1' ? 'text-blue-100' : 'text-slate-400'}`}>
-                    Square
-                  </span>
                 </button>
               </div>
             </div>
