@@ -6,7 +6,6 @@ import {
   X,
   Check,
   Crown,
-  ShieldCheck,
   ChevronDown,
 } from 'lucide-react';
 
@@ -513,29 +512,6 @@ export function PaywallModal({ isOpen, onClose }: PaywallModalProps) {
                 </tr>
               </tbody>
             </table>
-          </div>
-        </div>
-
-        {/* Security & Payment Methods */}
-        <div className="rounded-2xl border border-slate-200/90 bg-slate-50 p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 border border-blue-200 text-blue-600 shadow-xs shrink-0">
-              <ShieldCheck className="h-5 w-5 text-blue-600" />
-            </div>
-            <div>
-              <h4 className="text-xs sm:text-sm font-black text-slate-950">
-                Bank-Grade 256-Bit SSL Security
-              </h4>
-              <p className="text-[11px] text-slate-500 font-medium">
-                Official billing via Razorpay • UPI, Cards, NetBanking.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-1.5 text-[11px] font-bold text-slate-600">
-            <span className="px-2.5 py-1 rounded-lg border border-slate-200 bg-white">UPI / GPay</span>
-            <span className="px-2.5 py-1 rounded-lg border border-slate-200 bg-white">Cards</span>
-            <span className="px-2.5 py-1 rounded-lg border border-slate-200 bg-white">NetBanking</span>
           </div>
         </div>
 

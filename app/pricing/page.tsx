@@ -7,7 +7,6 @@ import {
   ArrowLeft,
   Check,
   Video,
-  ShieldCheck,
   ChevronDown,
   Crown,
   Download,
@@ -622,31 +621,6 @@ export default function PricingPage() {
                 </tr>
               </tbody>
             </table>
-          </div>
-        </section>
-
-        {/* Security & Payment Methods */}
-        <section className="py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-          <div className="rounded-3xl border border-slate-200/90 bg-white p-6 sm:p-8 container-shade flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 shadow-sm shrink-0">
-                <ShieldCheck className="h-6 w-6 sm:h-7 sm:w-7 text-blue-600" />
-              </div>
-              <div className="space-y-0.5">
-                <h4 className="text-sm sm:text-base font-black text-slate-950">
-                  Bank-Grade 256-Bit SSL Security
-                </h4>
-                <p className="text-xs sm:text-sm text-slate-500 font-semibold">
-                  Official billing operated by Pace AI Technologies (OPC) Private Limited via Razorpay.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-2 text-xs font-bold text-slate-600">
-              <span className="px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50">UPI / GPay / PhonePe</span>
-              <span className="px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50">Credit / Debit Card</span>
-              <span className="px-3 py-1.5 rounded-lg border border-slate-200 bg-slate-50">NetBanking</span>
-            </div>
           </div>
         </section>
 

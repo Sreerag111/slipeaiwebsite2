@@ -225,9 +225,8 @@ export function Sidebar({
                 onClose();
                 onOpenPricing();
               }}
-              className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-slate-950 text-white font-black text-xs uppercase tracking-wider hover:bg-slate-800 transition-all shadow-sm active:scale-95 cursor-pointer"
+              className="w-full flex items-center justify-center py-2 px-3 rounded-xl bg-slate-950 text-white font-black text-xs uppercase tracking-wider hover:bg-slate-800 transition-all shadow-sm active:scale-95 cursor-pointer"
             >
-              <Sparkles className="w-3.5 h-3.5" />
               <span>Upgrade Now</span>
             </button>
           </div>
