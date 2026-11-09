@@ -398,9 +398,8 @@ export function AIImageCreation({ onStartEnhancing }: AIImageCreationProps) {
                 type="button"
                 onClick={() => handleGenerate()}
                 disabled={isGenerating || !prompt.trim()}
-                className="flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-black text-xs sm:text-sm uppercase tracking-wider shadow-md hover:shadow-lg disabled:shadow-none transition-all active:scale-95 shrink-0"
+                className="flex items-center justify-center px-6 sm:px-8 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white font-black text-xs sm:text-sm uppercase tracking-wider shadow-md hover:shadow-lg disabled:shadow-none transition-all active:scale-95 shrink-0"
               >
-                <Sparkles className="h-4 w-4" />
                 <span>{isGenerating ? 'Generating...' : `Generate ${aspectRatio}`}</span>
               </button>
             </div>

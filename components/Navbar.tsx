@@ -37,7 +37,11 @@ export function Navbar({ onOpenPricing, activeTab, setActiveTab }: NavbarProps) 
               onClick={() => {
                 if (setActiveTab) setActiveTab(item.id);
                 const el = document.getElementById(item.id);
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
+                if (el) {
+                  el.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                  window.location.href = `/#${item.id}`;
+                }
               }}
               className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${
                 activeTab === item.id
@@ -95,7 +99,11 @@ export function Navbar({ onOpenPricing, activeTab, setActiveTab }: NavbarProps) 
                 if (setActiveTab) setActiveTab(item.id);
                 setMobileMenuOpen(false);
                 const el = document.getElementById(item.id);
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
+                if (el) {
+                  el.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                  window.location.href = `/#${item.id}`;
+                }
               }}
               className="block w-full text-left py-2.5 px-3 rounded-lg text-sm font-semibold text-slate-700 hover:text-slate-950 hover:bg-slate-100 transition-colors"
             >
