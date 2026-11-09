@@ -83,15 +83,15 @@ export function Hero({ onStartEnhancing, onOpenPricing }: HeroProps) {
           {/* Left Column: Copy & Actions */}
           <div className="lg:col-span-6 space-y-5 sm:space-y-6 text-center lg:text-left">
             {/* Main Headline */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-black tracking-tight text-slate-950 leading-[1.15] sm:leading-[1.1]">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight text-slate-950 font-display leading-[1.15] sm:leading-[1.1]">
               Bring your photos back to life{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-slate-800 to-slate-600">
                 without losing original look!
               </span>
             </h1>
 
-            {/* Sub-headline: Semi Bold */}
-            <p className="text-xs sm:text-sm md:text-base lg:text-lg text-slate-600 font-semibold max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+            {/* Sub-headline: Styled like select your enhancement category */}
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-slate-600 font-display font-medium max-w-2xl mx-auto lg:mx-0 leading-relaxed">
               These enhancements are done in SlipeAI not fake. Restore historical damage, remove camera blur, boost resolution up to 4K, and preserve natural human skin textures.
             </p>
 
@@ -99,7 +99,7 @@ export function Hero({ onStartEnhancing, onOpenPricing }: HeroProps) {
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center lg:justify-start gap-3 sm:gap-3.5 pt-1 sm:pt-2">
               <button
                 onClick={onStartEnhancing}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-slate-950 text-white font-extrabold text-xs sm:text-sm hover:bg-slate-800 transition-all duration-200 shadow-xl container-shade hover:scale-[1.02] active:scale-95"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-slate-950 text-white font-extrabold font-display text-xs sm:text-sm hover:bg-slate-800 transition-all duration-200 shadow-xl container-shade hover:scale-[1.02] active:scale-95"
               >
                 <Sparkles className="h-4 w-4" />
                 <span>Enhance Photo Now</span>
@@ -109,7 +109,7 @@ export function Hero({ onStartEnhancing, onOpenPricing }: HeroProps) {
                 href="https://play.google.com/store/apps/details?id=com.paceai.paceai"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 sm:px-7 py-3.5 sm:py-4 rounded-2xl border border-slate-200 bg-white text-slate-900 font-bold text-xs sm:text-sm hover:bg-slate-50 transition-all duration-200 shadow-sm container-shade-sm active:scale-95"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 sm:px-7 py-3.5 sm:py-4 rounded-2xl border border-slate-200 bg-white text-slate-900 font-bold font-display text-xs sm:text-sm hover:bg-slate-50 transition-all duration-200 shadow-sm container-shade-sm active:scale-95"
               >
                 <Download className="h-4 w-4 text-slate-600" />
                 <span>Google Play App</span>
@@ -117,51 +117,20 @@ export function Hero({ onStartEnhancing, onOpenPricing }: HeroProps) {
             </div>
 
             {/* Key Value Props */}
-            <div className="grid grid-cols-2 gap-3 sm:gap-6 pt-5 sm:pt-6 border-t border-slate-200 max-w-md mx-auto lg:mx-0 text-center sm:text-left">
+            <div className="grid grid-cols-2 gap-3 sm:gap-6 pt-5 sm:pt-6 border-t border-slate-200 max-w-md mx-auto lg:mx-0 text-center sm:text-left font-display">
               <div className="p-1">
-                <p className="text-lg sm:text-xl md:text-2xl font-black text-slate-950">4K Ultra</p>
-                <p className="text-xs sm:text-sm text-slate-500 font-semibold mt-0.5">Neural Upscaling</p>
+                <p className="text-lg sm:text-xl md:text-2xl font-extrabold text-slate-950">4K Ultra</p>
+                <p className="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">Neural Upscaling</p>
               </div>
               <div className="p-1 border-l border-slate-200 pl-4 sm:pl-6">
-                <p className="text-lg sm:text-xl md:text-2xl font-black text-slate-950">100% Real</p>
-                <p className="text-xs sm:text-sm text-slate-500 font-semibold mt-0.5">True Face Texture</p>
+                <p className="text-lg sm:text-xl md:text-2xl font-extrabold text-slate-950">100% Real</p>
+                <p className="text-xs sm:text-sm text-slate-500 font-medium mt-0.5">True Face Texture</p>
               </div>
             </div>
           </div>
 
           {/* Right Column: Individual Square Photos Showcase */}
           <div className="lg:col-span-6 flex flex-col items-center justify-center w-full">
-            {/* Top Navigation Switcher Pills */}
-            <div className="flex items-center justify-center gap-1 sm:gap-1.5 p-1 rounded-full bg-white border border-slate-200/90 shadow-sm mb-3.5 max-w-full overflow-x-auto no-scrollbar">
-              <button
-                type="button"
-                onClick={() => setSelectedPhotoId(null)}
-                className={`px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold transition-all duration-200 whitespace-nowrap ${
-                  selectedPhotoId === null
-                    ? 'bg-slate-950 text-white shadow-sm'
-                    : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100'
-                }`}
-              >
-                All 4 Photos
-              </button>
-              {HERO_PHOTOS.map((photo) => {
-                const isActive = selectedPhotoId === photo.id;
-                return (
-                  <button
-                    key={photo.id}
-                    type="button"
-                    onClick={() => setSelectedPhotoId(photo.id)}
-                    className={`px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold transition-all duration-200 whitespace-nowrap ${
-                      isActive
-                        ? 'bg-slate-950 text-white shadow-sm'
-                        : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100'
-                    }`}
-                  >
-                    {photo.label}
-                  </button>
-                );
-              })}
-            </div>
 
             {/* View Mode 1: Responsive 2x2 Grid of Individual Square Photos */}
             {activePhoto === null ? (
@@ -184,7 +153,7 @@ export function Hero({ onStartEnhancing, onOpenPricing }: HeroProps) {
                       />
 
                       {/* Feature Tag */}
-                      <div className="absolute top-2 left-2 z-10 bg-slate-950/90 backdrop-blur-sm text-white text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 rounded-md shadow-sm">
+                      <div className="absolute top-2 left-2 z-10 bg-slate-950/90 backdrop-blur-sm text-white text-[9px] sm:text-[10px] font-bold font-display px-2 py-0.5 rounded-md shadow-sm">
                         {photo.tag}
                       </div>
 
@@ -195,11 +164,11 @@ export function Hero({ onStartEnhancing, onOpenPricing }: HeroProps) {
                     </div>
 
                     {/* Card Title & Badge */}
-                    <div className="pt-2 pb-0.5 px-0.5 text-center">
-                      <p className="text-[11px] sm:text-xs font-black text-slate-900 truncate">
+                    <div className="pt-2 pb-0.5 px-0.5 text-center font-display">
+                      <p className="text-[11px] sm:text-xs font-bold text-slate-900 truncate">
                         {photo.title}
                       </p>
-                      <p className="text-[9px] sm:text-[10px] text-slate-500 font-semibold truncate mt-0.5">
+                      <p className="text-[9px] sm:text-[10px] text-slate-500 font-medium truncate mt-0.5">
                         {photo.badge}
                       </p>
                     </div>
@@ -220,10 +189,10 @@ export function Hero({ onStartEnhancing, onOpenPricing }: HeroProps) {
                   <button
                     type="button"
                     onClick={() => setSelectedPhotoId(null)}
-                    className="flex items-center gap-1 text-[11px] sm:text-xs font-bold text-slate-600 hover:text-slate-950 px-2.5 py-1 rounded-lg hover:bg-slate-100 transition-colors"
+                    className="flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-950 px-2.5 py-1 rounded-lg hover:bg-slate-100 transition-colors font-display"
                   >
-                    <ArrowLeft className="w-3 h-3" />
-                    <span>All 4 Photos</span>
+                    <ArrowLeft className="w-3.5 h-3.5" />
+                    <span>Back</span>
                   </button>
                 </div>
 
@@ -239,17 +208,17 @@ export function Hero({ onStartEnhancing, onOpenPricing }: HeroProps) {
                   />
 
                   {/* Feature Tag */}
-                  <div className="absolute top-3 left-3 bg-slate-950 text-white text-[10px] sm:text-xs font-black px-2.5 py-1 rounded-lg shadow-md">
+                  <div className="absolute top-3 left-3 bg-slate-950 text-white text-[10px] sm:text-xs font-black px-2.5 py-1 rounded-lg shadow-md font-display">
                     {activePhoto.tag}
                   </div>
                 </div>
 
                 {/* Subtitle & Details */}
-                <div className="pt-3 text-center">
-                  <p className="text-xs sm:text-sm font-semibold text-slate-800">
+                <div className="pt-3 text-center font-display">
+                  <p className="text-xs sm:text-sm font-bold text-slate-800">
                     {activePhoto.subtitle}
                   </p>
-                  <p className="text-[11px] sm:text-xs text-slate-500 font-semibold mt-0.5 flex items-center justify-center gap-1">
+                  <p className="text-[11px] sm:text-xs text-slate-500 font-medium mt-0.5 flex items-center justify-center gap-1">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 inline" />
                     <span>Real Slipe AI Model Enhancement • 100% Real Texture</span>
                   </p>
@@ -258,9 +227,9 @@ export function Hero({ onStartEnhancing, onOpenPricing }: HeroProps) {
             )}
 
             {/* Sub-caption below showcase */}
-            <div className="mt-3 text-center max-w-md px-2">
-              <p className="text-[11px] sm:text-xs text-slate-500 font-semibold">
-                Tap any square photo to inspect the high-resolution enhancement
+            <div className="mt-3.5 text-center max-w-md px-2">
+              <p className="text-xs sm:text-sm text-slate-600 font-display font-medium">
+                These enhancements are done by SlipeAI
               </p>
             </div>
           </div>
