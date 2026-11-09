@@ -254,9 +254,103 @@ export function AIImageCreation({
       : 'aspect-square max-h-[560px] max-w-xl mx-auto';
 
   return (
-    <section id="create" className="pt-8 pb-16 sm:pt-12 sm:pb-20 md:pt-16 md:pb-28 bg-[#F8FAFC]">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-12">
-        {/* Central Search / Image Creation Bar with '+' File Upload Option */}
+    <section id="create" className="pt-6 pb-16 sm:pt-10 sm:pb-20 md:pt-12 md:pb-28 bg-[#F8FAFC]">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
+        {/* Featured Styles & Presets Carousel (Vintage 90's Camera, AI Photoshoot, Golden Hour, etc.) */}
+        <div className="relative group/carousel">
+          {canScrollLeft && (
+            <button
+              type="button"
+              onClick={() => handleScroll('left')}
+              aria-label="Previous styles"
+              className="absolute -left-3 sm:-left-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white text-slate-900 border border-slate-200/90 shadow-xl flex items-center justify-center transition-all hover:scale-105 hover:bg-slate-50 active:scale-95"
+            >
+              <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-slate-800" />
+            </button>
+          )}
+
+          {canScrollRight && (
+            <button
+              type="button"
+              onClick={() => handleScroll('right')}
+              aria-label="Next styles"
+              className="absolute -right-3 sm:-right-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white text-slate-900 border border-slate-200/90 shadow-xl flex items-center justify-center transition-all hover:scale-105 hover:bg-slate-50 active:scale-95"
+            >
+              <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-slate-800" />
+            </button>
+          )}
+
+          {/* Horizontal Scrollable Row of Style Cards */}
+          <div
+            ref={scrollContainerRef}
+            onScroll={checkScroll}
+            className="flex gap-4 sm:gap-6 overflow-x-auto scroll-smooth pb-4 pt-1 px-1 scrollbar-none snap-x snap-mandatory"
+          >
+            {stylePresets.map((style, idx) => {
+              const Icon = style.icon;
+              const isSelected = prompt === style.prompt;
+
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => {
+                    setPrompt(style.prompt);
+                    handleGenerate(style.prompt);
+                    promptInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }}
+                  className={`w-[280px] sm:w-[320px] md:w-[340px] shrink-0 snap-start flex flex-col p-3.5 sm:p-4 rounded-[24px] sm:rounded-[28px] bg-white border transition-all duration-300 active:scale-[0.98] group text-left ${
+                    isSelected
+                      ? 'border-blue-600 ring-2 ring-blue-500/20 shadow-[0_16px_36px_rgba(0,0,0,0.1)] scale-[1.01]'
+                      : 'border-slate-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.1)] hover:-translate-y-1.5'
+                  }`}
+                >
+                  {/* Media Visual */}
+                  <div className="relative w-full aspect-[16/11] sm:aspect-[4/3] rounded-[18px] sm:rounded-[22px] overflow-hidden bg-slate-100 mb-3.5 sm:mb-4 shadow-inner border border-slate-100">
+                    <img
+                      src={style.img}
+                      alt={style.label}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                      loading="eager"
+                    />
+
+                    {/* Hover indicator: "Try Style ->" */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3 pointer-events-none">
+                      <span className="text-[11px] font-bold text-white bg-blue-600/95 px-3 py-1 rounded-lg backdrop-blur-sm shadow-md flex items-center gap-1.5 font-display">
+                        <span>Try Style</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </span>
+                    </div>
+
+                    {isSelected && (
+                      <div className="absolute top-3 right-3 bg-blue-600 text-white p-1 rounded-full shadow-md z-10">
+                        <Check className="h-3.5 w-3.5" />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Card Info */}
+                  <div className="space-y-1.5 flex-1 flex flex-col justify-between px-1 pb-1">
+                    <div className="flex items-center gap-2.5">
+                      <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-slate-100 text-slate-900 group-hover:bg-blue-600 group-hover:text-white transition-colors shrink-0 shadow-sm">
+                        <Icon className="w-4 h-4" />
+                      </div>
+                      <h4 className="text-base sm:text-lg font-bold text-slate-950 font-display tracking-tight group-hover:text-blue-700 transition-colors line-clamp-1">
+                        {style.label}
+                      </h4>
+                    </div>
+
+                    <p className="text-xs sm:text-[13px] text-slate-600 font-medium leading-relaxed font-display line-clamp-2">
+                      {style.desc}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Central Search / Image Creation Bar with '+' File Upload Option (Placed below Vintage 90s & AI Photoshoot) */}
         <div className="max-w-3xl mx-auto w-full space-y-3">
           <div className="relative rounded-full border border-slate-200/90 bg-white shadow-[0_8px_30px_rgba(0,0,0,0.06)] px-2 sm:px-3 py-2 flex items-center gap-2 transition-all focus-within:border-blue-600 focus-within:ring-4 focus-within:ring-blue-500/10">
             {/* '+' File Upload Button with 'More options' Tooltip (Matches reference image) */}
@@ -451,103 +545,6 @@ export function AIImageCreation({
             ) : null}
           </div>
         )}
-
-        {/* Featured Styles & Presets Carousel (Clearly visible large cards) */}
-        <div className="pt-2">
-          {/* Carousel Container with Circular Navigation Buttons */}
-          <div className="relative group/carousel">
-            {canScrollLeft && (
-              <button
-                type="button"
-                onClick={() => handleScroll('left')}
-                aria-label="Previous styles"
-                className="absolute -left-3 sm:-left-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white text-slate-900 border border-slate-200/90 shadow-xl flex items-center justify-center transition-all hover:scale-105 hover:bg-slate-50 active:scale-95"
-              >
-                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-slate-800" />
-              </button>
-            )}
-
-            {canScrollRight && (
-              <button
-                type="button"
-                onClick={() => handleScroll('right')}
-                aria-label="Next styles"
-                className="absolute -right-3 sm:-right-5 top-1/2 -translate-y-1/2 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-white text-slate-900 border border-slate-200/90 shadow-xl flex items-center justify-center transition-all hover:scale-105 hover:bg-slate-50 active:scale-95"
-              >
-                <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6 text-slate-800" />
-              </button>
-            )}
-
-            {/* Horizontal Scrollable Row of Style Cards */}
-            <div
-              ref={scrollContainerRef}
-              onScroll={checkScroll}
-              className="flex gap-4 sm:gap-6 overflow-x-auto scroll-smooth pb-6 pt-2 px-1 scrollbar-none snap-x snap-mandatory"
-            >
-              {stylePresets.map((style, idx) => {
-                const Icon = style.icon;
-                const isSelected = prompt === style.prompt;
-
-                return (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => {
-                      setPrompt(style.prompt);
-                      handleGenerate(style.prompt);
-                      promptInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    }}
-                    className={`w-[280px] sm:w-[320px] md:w-[340px] shrink-0 snap-start flex flex-col p-3.5 sm:p-4 rounded-[24px] sm:rounded-[28px] bg-white border transition-all duration-300 active:scale-[0.98] group text-left ${
-                      isSelected
-                        ? 'border-blue-600 ring-2 ring-blue-500/20 shadow-[0_16px_36px_rgba(0,0,0,0.1)] scale-[1.01]'
-                        : 'border-slate-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.1)] hover:-translate-y-1.5'
-                    }`}
-                  >
-                    {/* Media Visual */}
-                    <div className="relative w-full aspect-[16/11] sm:aspect-[4/3] rounded-[18px] sm:rounded-[22px] overflow-hidden bg-slate-100 mb-3.5 sm:mb-4 shadow-inner border border-slate-100">
-                      <img
-                        src={style.img}
-                        alt={style.label}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-                        loading="eager"
-                      />
-
-                      {/* Hover indicator: "Try Style ->" */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-3 pointer-events-none">
-                        <span className="text-[11px] font-bold text-white bg-blue-600/95 px-3 py-1 rounded-lg backdrop-blur-sm shadow-md flex items-center gap-1.5 font-display">
-                          <span>Try Style</span>
-                          <ArrowRight className="w-3 h-3" />
-                        </span>
-                      </div>
-
-                      {isSelected && (
-                        <div className="absolute top-3 right-3 bg-blue-600 text-white p-1 rounded-full shadow-md z-10">
-                          <Check className="h-3.5 w-3.5" />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Card Info */}
-                    <div className="space-y-1.5 flex-1 flex flex-col justify-between px-1 pb-1">
-                      <div className="flex items-center gap-2.5">
-                        <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-slate-100 text-slate-900 group-hover:bg-blue-600 group-hover:text-white transition-colors shrink-0 shadow-sm">
-                          <Icon className="w-4 h-4" />
-                        </div>
-                        <h4 className="text-base sm:text-lg font-bold text-slate-950 font-display tracking-tight group-hover:text-blue-700 transition-colors line-clamp-1">
-                          {style.label}
-                        </h4>
-                      </div>
-
-                      <p className="text-xs sm:text-[13px] text-slate-600 font-medium leading-relaxed font-display line-clamp-2">
-                        {style.desc}
-                      </p>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
