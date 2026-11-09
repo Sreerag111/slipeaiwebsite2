@@ -23,7 +23,6 @@ import {
   Columns,
   Loader2,
   Download,
-  FileText,
 } from 'lucide-react';
 import { saveAs } from 'file-saver';
 import { ENHANCEMENT_CATEGORIES, EnhancementCategory } from '@/lib/categories';
@@ -418,14 +417,14 @@ export function PhotoEnhancer({ onOpenPricing, initialCategory }: PhotoEnhancerP
           className="rounded-[28px] sm:rounded-[36px] border border-slate-200/90 bg-white p-5 sm:p-8 md:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.06)] space-y-6"
         >
           {!previewUrl ? (
-            /* Upload Dropzone with Dotted Grid Pattern & 3 Fanned Cards */
+            /* Upload Dropzone with Dotted Grid Pattern on White Theme */
             <div
               onDragOver={(e) => e.preventDefault()}
               onDrop={handleDrop}
               onClick={() => fileInputRef.current?.click()}
-              className="relative overflow-hidden rounded-[26px] sm:rounded-[32px] border border-slate-800/80 bg-[#141519] p-8 sm:p-12 md:p-16 text-center cursor-pointer transition-all duration-300 shadow-2xl flex flex-col items-center justify-center space-y-6 group hover:border-slate-700"
+              className="relative overflow-hidden rounded-[26px] sm:rounded-[32px] border border-slate-200/90 hover:border-blue-500 bg-white p-8 sm:p-14 md:p-16 text-center cursor-pointer transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.04)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.08)] flex flex-col items-center justify-center space-y-6 group"
               style={{
-                backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.15) 1.2px, transparent 1.2px)',
+                backgroundImage: 'radial-gradient(rgba(100, 116, 139, 0.22) 1.3px, transparent 1.3px)',
                 backgroundSize: '20px 20px',
                 backgroundPosition: 'center',
               }}
@@ -438,54 +437,28 @@ export function PhotoEnhancer({ onOpenPricing, initialCategory }: PhotoEnhancerP
                 className="hidden"
               />
 
-              {/* Ambient Corner Glows (matches attached image) */}
-              <div className="absolute -top-24 -left-24 w-64 h-64 bg-rose-500/10 rounded-full blur-3xl pointer-events-none" />
-              <div className="absolute -bottom-24 -right-24 w-64 h-64 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
-
-              {/* 3 Overlapping Photo Cards (exact match to attached image) */}
-              <div className="relative z-10 flex items-center justify-center py-1 sm:py-2 group-hover:scale-105 transition-transform duration-300">
-                <img
-                  src="/assets/images/enhance_cards_smooth.png"
-                  alt="Enhance sample photos"
-                  className="w-48 sm:w-56 md:w-64 h-auto object-contain drop-shadow-[0_12px_24px_rgba(0,0,0,0.45)]"
-                  loading="eager"
-                />
-              </div>
-
               {/* Text Description */}
               <div className="relative z-10 space-y-1.5 font-display max-w-lg mx-auto">
-                <p className="text-base sm:text-lg md:text-xl font-bold text-slate-100 tracking-tight">
-                  Drag and drop your photo here, or <span className="underline text-blue-400 font-black hover:text-blue-300 transition-colors">browse files</span>
+                <p className="text-base sm:text-lg md:text-xl font-bold text-slate-900 tracking-tight">
+                  Drag and drop your photo here, or <span className="underline text-blue-600 font-black hover:text-blue-700 transition-colors">browse files</span>
                 </p>
-                <p className="text-xs sm:text-sm text-slate-400 font-medium">
+                <p className="text-xs sm:text-sm text-slate-500 font-semibold">
                   Supports JPEG, PNG, and WebP (up to 15 MB) &bull; Processed with SlipeAI
                 </p>
               </div>
 
-              {/* Action Buttons: Upload & Select Asset (exact match to attached image) */}
-              <div className="relative z-10 flex flex-wrap items-center justify-center gap-3 pt-1">
+              {/* Primary Upload Action Button */}
+              <div className="relative z-10 flex items-center justify-center pt-1">
                 <button
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     fileInputRef.current?.click();
                   }}
-                  className="flex items-center gap-2 px-6 sm:px-7 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm shadow-lg shadow-blue-600/30 active:scale-95 transition-all font-display cursor-pointer"
+                  className="flex items-center gap-2 px-7 sm:px-8 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-blue-600/25 active:scale-95 transition-all font-display cursor-pointer"
                 >
                   <Upload className="w-4 h-4 sm:w-4.5 sm:h-4.5 stroke-[2.5]" />
                   <span>Upload</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    fileInputRef.current?.click();
-                  }}
-                  className="flex items-center gap-2 px-6 sm:px-7 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-[#23252A] hover:bg-[#2C2E34] text-slate-200 border border-white/10 font-bold text-xs sm:text-sm active:scale-95 transition-all font-display cursor-pointer"
-                >
-                  <FileText className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-slate-400 stroke-[2]" />
-                  <span>Select asset</span>
                 </button>
               </div>
             </div>
