@@ -8,13 +8,14 @@ import { Navbar } from '@/components/Navbar';
 import { PhotoEnhancer } from '@/components/PhotoEnhancer';
 import { VideoEnhancer } from '@/components/VideoEnhancer';
 import { AIImageCreation } from '@/components/AIImageCreation';
+import { AudioEnhanceSection } from '@/components/AudioEnhanceSection';
 import { PaywallModal } from '@/components/PaywallModal';
 
 function HomeContent() {
   const searchParams = useSearchParams();
   const tabParam = searchParams.get('tab');
 
-  const [activeTab, setActiveTab] = useState<'create' | 'enhance' | 'video'>('create');
+  const [activeTab, setActiveTab] = useState<'create' | 'enhance' | 'video' | 'audio'>('create');
   const [isPricingOpen, setIsPricingOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isDesktopSidebarCollapsed, setIsDesktopSidebarCollapsed] = useState(false);
@@ -24,6 +25,8 @@ function HomeContent() {
       setActiveTab('enhance');
     } else if (tabParam === 'video') {
       setActiveTab('video');
+    } else if (tabParam === 'audio') {
+      setActiveTab('audio');
     } else if (tabParam === 'create') {
       setActiveTab('create');
     }
@@ -42,6 +45,8 @@ function HomeContent() {
       setActiveTab('enhance');
     } else if (sectionId === 'video') {
       setActiveTab('video');
+    } else if (sectionId === 'audio') {
+      setActiveTab('audio');
     } else {
       setActiveTab('create');
     }
@@ -89,6 +94,10 @@ function HomeContent() {
 
           {activeTab === 'video' && (
             <VideoEnhancer onOpenPricing={() => setIsPricingOpen(true)} />
+          )}
+
+          {activeTab === 'audio' && (
+            <AudioEnhanceSection />
           )}
         </main>
       </div>

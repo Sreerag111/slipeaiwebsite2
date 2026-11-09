@@ -11,6 +11,7 @@ import {
   ChevronUp,
   Search,
   PanelLeftClose,
+  AudioWaveform,
 } from 'lucide-react';
 import { AboutModal } from '@/components/AboutModal';
 
@@ -20,7 +21,7 @@ interface SidebarProps {
   onClose: () => void;
   onToggleCollapse?: () => void;
   onOpenPricing: () => void;
-  activeItem?: 'create' | 'enhance' | 'video' | string;
+  activeItem?: 'create' | 'enhance' | 'video' | 'audio' | string;
   onSelectSection?: (sectionId: string) => void;
 }
 
@@ -79,6 +80,14 @@ export function Sidebar({
       icon: Film,
       isCurrent: activeItem === 'video',
       action: () => handleNavClick('video'),
+    },
+    {
+      id: 'audio',
+      label: 'Enhance Audios',
+      badge: 'Coming Soon',
+      icon: AudioWaveform,
+      isCurrent: activeItem === 'audio',
+      action: () => handleNavClick('audio'),
     },
   ];
 
@@ -148,7 +157,7 @@ export function Sidebar({
             </div>
           </div>
 
-          {/* Main Navigation Links: Enhance Photos, Remaster Videos, AI Image Creation */}
+          {/* Main Navigation Links: Enhance Photos, Remaster Videos, Enhance Audios, AI Image Creation */}
           <nav className="space-y-1.5 pt-1 font-display">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -157,14 +166,27 @@ export function Sidebar({
                   key={item.id}
                   type="button"
                   onClick={item.action}
-                  className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs sm:text-[13px] font-bold transition-all text-left cursor-pointer ${
+                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-[13px] font-bold transition-all text-left cursor-pointer ${
                     item.isCurrent
                       ? 'bg-slate-950 text-white shadow-sm'
                       : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/80'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 shrink-0 ${item.isCurrent ? 'text-white' : 'text-slate-500'}`} />
-                  <span className="truncate">{item.label}</span>
+                  <div className="flex items-center gap-3 min-w-0">
+                    <Icon className={`w-4 h-4 shrink-0 ${item.isCurrent ? 'text-white' : 'text-slate-500'}`} />
+                    <span className="truncate">{item.label}</span>
+                  </div>
+                  {item.badge && (
+                    <span
+                      className={`text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded-md shrink-0 ml-1.5 ${
+                        item.isCurrent
+                          ? 'bg-white/20 text-white'
+                          : 'bg-blue-50 text-blue-700 border border-blue-200'
+                      }`}
+                    >
+                      {item.badge}
+                    </span>
+                  )}
                 </button>
               );
             })}
