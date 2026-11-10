@@ -18,7 +18,7 @@ export const VIDEO_CATEGORIES: VideoCategory[] = [
     id: 'slow_motion',
     label: 'Slow Motion',
     desc: 'Optical flow 60fps frame interpolation for cinematic high-framerate fluid motion.',
-    file: 'slow_motion.webp',
+    file: 'slow_motion.mp4',
     iconName: 'PlayCircle',
   },
   {
