@@ -259,9 +259,9 @@ export function Sidebar({
                 <img
                   src="/slipe-logo.png"
                   alt="SlipeAI"
-                  className="w-6 h-6 object-contain"
+                  className="w-7 h-7 object-contain group-hover:scale-105 transition-transform"
                 />
-                <span className="text-2xl font-extrabold font-display tracking-tight leading-tight text-slate-950 group-hover:text-slate-700 transition-colors">
+                <span className="text-[27px] font-extrabold font-display tracking-tight leading-tight bg-gradient-to-r from-slate-950 via-slate-400 to-slate-950 bg-clip-text text-transparent animate-text-shimmer inline-block">
                   SlipeAI
                 </span>
               </button>
