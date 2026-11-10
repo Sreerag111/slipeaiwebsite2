@@ -123,7 +123,7 @@ export function Sidebar({
         {isCollapsed && (
           <div className="hidden lg:flex flex-col justify-between h-full w-full py-4 px-2 items-center">
             {/* Top Brand Logo & Navigation Stack */}
-            <div className="w-full flex flex-col items-center space-y-3">
+            <div className="w-full flex flex-col items-center space-y-2.5">
               {/* SlipeAI Brand Logo / Expand Trigger */}
               <button
                 type="button"
@@ -131,24 +131,24 @@ export function Sidebar({
                   if (onExpand) onExpand();
                   else if (onToggleCollapse) onToggleCollapse();
                 }}
-                className="w-10 h-10 rounded-xl hover:bg-slate-100 text-slate-900 flex items-center justify-center p-1 transition-all cursor-pointer group relative"
+                className="w-9 h-9 rounded-xl hover:bg-slate-100 text-slate-900 flex items-center justify-center p-1 transition-all cursor-pointer group relative"
                 title="Expand Sidebar (SlipeAI)"
                 aria-label="Expand Sidebar"
               >
                 <img
                   src="/slipe-logo.png"
                   alt="SlipeAI"
-                  className="w-7 h-7 object-contain group-hover:scale-105 transition-transform"
+                  className="w-5.5 h-5.5 object-contain group-hover:scale-105 transition-transform"
                 />
                 <span className="pointer-events-none absolute left-full ml-3 hidden group-hover:flex items-center px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[11px] font-semibold whitespace-nowrap shadow-xl z-50 border border-slate-700">
                   Expand Sidebar
                 </span>
               </button>
 
-              <div className="w-8 h-px bg-slate-200/90 my-1" />
+              <div className="w-7 h-px bg-slate-200/90 my-0.5" />
 
               {/* Nav Items Stack */}
-              <nav className="w-full flex flex-col items-center space-y-2">
+              <nav className="w-full flex flex-col items-center space-y-1.5">
                 {navItems.map((item) => {
                   const Icon = item.icon;
                   return (
@@ -156,17 +156,17 @@ export function Sidebar({
                       key={item.id}
                       type="button"
                       onClick={() => handleRailIconClick(item.id)}
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer relative group ${
+                      className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer relative group ${
                         item.isCurrent
-                          ? 'bg-slate-100 text-slate-950 shadow-xs border border-slate-200/80 font-bold'
+                          ? 'bg-slate-950 text-white shadow-sm'
                           : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100'
                       }`}
                       title={`${item.label}${item.suffix ? ' ' + item.suffix : ''}`}
                       aria-label={item.label}
                     >
                       <Icon
-                        className={`w-4.5 h-4.5 shrink-0 ${
-                          item.isCurrent ? 'text-slate-950' : 'text-slate-600 group-hover:text-slate-950'
+                        className={`w-4 h-4 shrink-0 ${
+                          item.isCurrent ? 'text-white' : 'text-slate-600 group-hover:text-slate-950'
                         }`}
                       />
 
@@ -184,18 +184,18 @@ export function Sidebar({
                 })}
               </nav>
 
-              <div className="w-8 h-px bg-slate-200/90 my-1" />
+              <div className="w-7 h-px bg-slate-200/90 my-0.5" />
 
               {/* Android App Link */}
               <a
                 href="https://play.google.com/store/apps/details?id=com.paceai.paceai"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl flex items-center justify-center text-slate-600 hover:text-slate-950 hover:bg-slate-100 transition-all relative group cursor-pointer"
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-600 hover:text-slate-950 hover:bg-slate-100 transition-all relative group cursor-pointer"
                 title="Download Android App"
                 aria-label="Download Android App"
               >
-                <Download className="w-4.5 h-4.5 text-slate-500 group-hover:text-slate-950" />
+                <Download className="w-4 h-4 text-slate-500 group-hover:text-slate-950" />
                 <span className="pointer-events-none absolute left-full ml-3 hidden group-hover:flex items-center px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[11px] font-semibold whitespace-nowrap shadow-xl z-50 border border-slate-700">
                   Download Android App
                 </span>
@@ -203,7 +203,7 @@ export function Sidebar({
             </div>
 
             {/* Bottom: Upgrade Shield + Avatar S */}
-            <div className="w-full flex flex-col items-center space-y-3 pt-3 border-t border-slate-200/80">
+            <div className="w-full flex flex-col items-center space-y-2.5 pt-2.5 border-t border-slate-200/80">
               {/* Free Plan / Upgrade Shield */}
               <button
                 type="button"
@@ -212,11 +212,11 @@ export function Sidebar({
                   else if (onToggleCollapse) onToggleCollapse();
                   onOpenPricing();
                 }}
-                className="w-10 h-10 rounded-xl flex items-center justify-center text-slate-600 hover:text-slate-950 hover:bg-slate-100 transition-all relative group cursor-pointer"
+                className="w-9 h-9 rounded-xl flex items-center justify-center text-slate-600 hover:text-slate-950 hover:bg-slate-100 transition-all relative group cursor-pointer"
                 title="Upgrade Plan"
                 aria-label="Upgrade Plan"
               >
-                <Shield className="w-4.5 h-4.5 text-slate-600 group-hover:text-slate-950" />
+                <Shield className="w-4 h-4 text-slate-600 group-hover:text-slate-950" />
                 <span className="pointer-events-none absolute left-full ml-3 hidden group-hover:flex flex-col px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[11px] whitespace-nowrap shadow-xl z-50 border border-slate-700">
                   <span className="font-bold text-white">Free Plan</span>
                   <span className="text-[10px] text-slate-300">{freeUses}/10 free uses used</span>
@@ -232,7 +232,7 @@ export function Sidebar({
                   else if (onToggleCollapse) onToggleCollapse();
                   setIsAboutOpen(true);
                 }}
-                className="w-9 h-9 rounded-full bg-emerald-600 text-white font-black text-xs flex items-center justify-center shadow-xs cursor-pointer hover:ring-2 hover:ring-emerald-400 hover:ring-offset-2 transition-all relative group"
+                className="w-7.5 h-7.5 rounded-full bg-emerald-600 text-white font-black text-[11px] flex items-center justify-center shadow-xs cursor-pointer hover:ring-2 hover:ring-emerald-400 hover:ring-offset-2 transition-all relative group"
                 title="Sreerag Jotish (Free Plan)"
                 aria-label="About & Profile"
               >
@@ -313,18 +313,18 @@ export function Sidebar({
                     onClick={item.action}
                     className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-[13px] font-bold transition-all text-left cursor-pointer ${
                       item.isCurrent
-                        ? 'bg-slate-100 text-slate-950 shadow-xs border border-slate-200/80 font-bold'
+                        ? 'bg-slate-950 text-white shadow-md'
                         : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/70 font-medium'
                     }`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <Icon className={`w-4 h-4 shrink-0 ${item.isCurrent ? 'text-slate-950' : 'text-slate-500'}`} />
+                      <Icon className={`w-4 h-4 shrink-0 ${item.isCurrent ? 'text-white' : 'text-slate-500'}`} />
                       <span className="truncate">
                         {item.label}
                         {item.suffix && (
                           <span
                             className={`ml-1 text-[11px] font-medium tracking-normal ${
-                              item.isCurrent ? 'text-slate-500' : 'text-slate-400'
+                              item.isCurrent ? 'text-white/80' : 'text-slate-400'
                             }`}
                           >
                             {item.suffix}
