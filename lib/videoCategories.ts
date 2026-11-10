@@ -25,7 +25,7 @@ export const VIDEO_CATEGORIES: VideoCategory[] = [
     id: 'hdr',
     label: 'HDR Remaster',
     desc: 'Dynamic exposure balance, expanded dynamic range, and cinema tone mapping.',
-    file: 'hdr.webp',
+    file: 'hdr.mp4',
     iconName: 'SunMedium',
   },
   {
