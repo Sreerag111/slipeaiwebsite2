@@ -185,14 +185,25 @@ export function VideoEnhancer({ onOpenPricing, initialCategory }: VideoEnhancerP
                       : 'border-slate-200/90 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_16px_36px_rgba(0,0,0,0.1)] hover:-translate-y-1.5'
                   }`}
                 >
-                  {/* Media Visual (Animated WebP Video: Large, prominent, and clearly visible) */}
+                  {/* Media Visual (High Quality Video / Animated WebP: Large, prominent, and clearly visible) */}
                   <div className="relative w-full aspect-[16/11] sm:aspect-[4/3] rounded-[18px] sm:rounded-[22px] overflow-hidden bg-slate-100 mb-3.5 sm:mb-4 shadow-inner border border-slate-100">
-                    <img
-                      src={`/assets/videos/remaster_categories/${cat.file}`}
-                      alt={cat.label}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
-                      loading="eager"
-                    />
+                    {cat.file.endsWith('.mp4') ? (
+                      <video
+                        src={`/assets/videos/remaster_categories/${cat.file}`}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out pointer-events-none"
+                      />
+                    ) : (
+                      <img
+                        src={`/assets/videos/remaster_categories/${cat.file}`}
+                        alt={cat.label}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out pointer-events-none"
+                        loading="eager"
+                      />
+                    )}
 
                     {/* Selected Badge or Hover Pill */}
                     {isSelected ? (

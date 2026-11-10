@@ -11,7 +11,7 @@ export const VIDEO_CATEGORIES: VideoCategory[] = [
     id: 'precision',
     label: 'Precision Clarity',
     desc: 'Neural edge sharpness, texture definition, and micro-contrast enhancement.',
-    file: 'precision.webp',
+    file: 'precision.mp4',
     iconName: 'Focus',
   },
   {
