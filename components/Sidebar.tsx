@@ -131,14 +131,14 @@ export function Sidebar({
                   if (onExpand) onExpand();
                   else if (onToggleCollapse) onToggleCollapse();
                 }}
-                className="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 flex items-center justify-center p-1.5 transition-all shadow-2xs cursor-pointer group relative"
+                className="w-10 h-10 rounded-xl hover:bg-slate-100 text-slate-900 flex items-center justify-center p-1 transition-all cursor-pointer group relative"
                 title="Expand Sidebar (SlipeAI)"
                 aria-label="Expand Sidebar"
               >
                 <img
                   src="/slipe-logo.png"
                   alt="SlipeAI"
-                  className="w-7 h-7 object-contain rounded group-hover:scale-105 transition-transform"
+                  className="w-7 h-7 object-contain group-hover:scale-105 transition-transform"
                 />
                 <span className="pointer-events-none absolute left-full ml-3 hidden group-hover:flex items-center px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[11px] font-semibold whitespace-nowrap shadow-xl z-50 border border-slate-700">
                   Expand Sidebar
@@ -259,7 +259,7 @@ export function Sidebar({
                 <img
                   src="/slipe-logo.png"
                   alt="SlipeAI"
-                  className="w-6 h-6 object-contain rounded"
+                  className="w-6 h-6 object-contain"
                 />
                 <span className="text-xl font-black tracking-tight text-slate-950 group-hover:text-slate-700 transition-colors">
                   SlipeAI
