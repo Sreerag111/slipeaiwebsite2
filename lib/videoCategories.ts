@@ -53,7 +53,7 @@ export const VIDEO_CATEGORIES: VideoCategory[] = [
     id: 'creative',
     label: 'Creative Detail',
     desc: 'Cinematic neural texture synthesis and micro-detail generation for vintage clips.',
-    file: 'creative.webp',
+    file: 'creative.mp4',
     iconName: 'Wand2',
   },
 ];
