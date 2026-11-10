@@ -39,7 +39,7 @@ export const VIDEO_CATEGORIES: VideoCategory[] = [
     id: 'colorize',
     label: 'Colorize Videos',
     desc: 'Authentic archival historical film colorization with realistic tones.',
-    file: 'colorize.webp',
+    file: 'colorize.mp4',
     iconName: 'Palette',
   },
   {
