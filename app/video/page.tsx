@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useState, useEffect } from 'react';
 import { Sidebar } from '@/components/Sidebar';
 import { Navbar } from '@/components/Navbar';
 import { PaywallModal } from '@/components/PaywallModal';
@@ -9,14 +9,43 @@ import { VideoEnhancer } from '@/components/VideoEnhancer';
 export default function VideoPage() {
   const [isPricingOpen, setIsPricingOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
-  const [isDesktopSidebarCollapsed, setIsDesktopSidebarCollapsed] = useState(false);
+  const [isDesktopSidebarCollapsed, setIsDesktopSidebarCollapsed] = useState(true);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('slipeai_sidebar_collapsed');
+      if (saved !== null) {
+        setIsDesktopSidebarCollapsed(saved === 'true');
+      } else {
+        setIsDesktopSidebarCollapsed(true);
+      }
+    } catch {
+      setIsDesktopSidebarCollapsed(true);
+    }
+  }, []);
 
   const handleToggleSidebar = () => {
     if (typeof window !== 'undefined' && window.innerWidth < 1024) {
       setIsMobileSidebarOpen((prev) => !prev);
     } else {
-      setIsDesktopSidebarCollapsed((prev) => !prev);
+      setIsDesktopSidebarCollapsed((prev) => {
+        const next = !prev;
+        try {
+          localStorage.setItem('slipeai_sidebar_collapsed', String(next));
+        } catch {}
+        return next;
+      });
     }
+  };
+
+  const handleToggleDesktopCollapse = () => {
+    setIsDesktopSidebarCollapsed((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem('slipeai_sidebar_collapsed', String(next));
+      } catch {}
+      return next;
+    });
   };
 
   return (
@@ -26,7 +55,7 @@ export default function VideoPage() {
         isOpen={isMobileSidebarOpen}
         isCollapsed={isDesktopSidebarCollapsed}
         onClose={() => setIsMobileSidebarOpen(false)}
-        onToggleCollapse={() => setIsDesktopSidebarCollapsed(!isDesktopSidebarCollapsed)}
+        onToggleCollapse={handleToggleDesktopCollapse}
         onOpenPricing={() => setIsPricingOpen(true)}
         activeItem="video"
       />
@@ -34,7 +63,7 @@ export default function VideoPage() {
       {/* Main Content Area */}
       <div
         className={`flex-1 min-w-0 flex flex-col justify-between transition-all duration-300 ${
-          isDesktopSidebarCollapsed ? 'lg:pl-0' : 'lg:pl-64 xl:pl-72'
+          isDesktopSidebarCollapsed ? 'lg:pl-16' : 'lg:pl-64 xl:pl-72'
         }`}
       >
         <div>
