@@ -46,7 +46,7 @@ export const VIDEO_CATEGORIES: VideoCategory[] = [
     id: 'denoise',
     label: 'Denoise Video',
     desc: 'Remove low-light sensor noise, grain, and high-ISO compression artifacts.',
-    file: 'denoise.webp',
+    file: 'denoise.mp4',
     iconName: 'ShieldAlert',
   },
   {
