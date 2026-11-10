@@ -261,7 +261,7 @@ export function Sidebar({
                   alt="SlipeAI"
                   className="w-6 h-6 object-contain"
                 />
-                <span className="text-xl font-black tracking-tight text-slate-950 group-hover:text-slate-700 transition-colors">
+                <span className="text-2xl font-extrabold font-display tracking-tight leading-tight text-slate-950 group-hover:text-slate-700 transition-colors">
                   SlipeAI
                 </span>
               </button>

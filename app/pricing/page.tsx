@@ -155,7 +155,7 @@ export default function PricingPage() {
       <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/85 backdrop-blur-md transition-colors">
         <div className="mx-auto flex h-16 sm:h-18 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link href="/" className="flex items-center group py-1">
-            <span className="text-2xl sm:text-3xl font-black tracking-tight text-slate-950 group-hover:text-slate-700 transition-colors">
+            <span className="text-2xl sm:text-3xl font-extrabold font-display tracking-tight leading-tight text-slate-950 group-hover:text-slate-700 transition-colors">
               SlipeAI
             </span>
           </Link>
