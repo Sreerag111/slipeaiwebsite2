@@ -138,7 +138,7 @@ export function Sidebar({
                 <img
                   src="/slipe-logo.png"
                   alt="SlipeAI"
-                  className="w-5.5 h-5.5 object-contain group-hover:scale-105 transition-transform"
+                  className="w-6 h-6 object-contain group-hover:scale-105 transition-transform"
                 />
                 <span className="pointer-events-none absolute left-full ml-3 hidden group-hover:flex items-center px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[11px] font-semibold whitespace-nowrap shadow-xl z-50 border border-slate-700">
                   Expand Sidebar
@@ -203,7 +203,7 @@ export function Sidebar({
             </div>
 
             {/* Bottom: Upgrade Shield + Avatar S */}
-            <div className="w-full flex flex-col items-center space-y-2.5 pt-2.5 border-t border-slate-200/80">
+            <div className="w-full flex flex-col items-center space-y-2.5 pt-2.5 pb-2 border-t border-slate-200/80 shrink-0">
               {/* Free Plan / Upgrade Shield */}
               <button
                 type="button"
@@ -232,7 +232,7 @@ export function Sidebar({
                   else if (onToggleCollapse) onToggleCollapse();
                   setIsAboutOpen(true);
                 }}
-                className="w-7.5 h-7.5 rounded-full bg-emerald-600 text-white font-black text-[11px] flex items-center justify-center shadow-xs cursor-pointer hover:ring-2 hover:ring-emerald-400 hover:ring-offset-2 transition-all relative group"
+                className="w-8 h-8 rounded-full bg-emerald-600 text-white font-black text-xs flex items-center justify-center shrink-0 shadow-sm cursor-pointer hover:ring-2 hover:ring-emerald-400 hover:ring-offset-2 transition-all relative group"
                 title="Sreerag Jotish (Free Plan)"
                 aria-label="About & Profile"
               >
