@@ -32,7 +32,7 @@ export const VIDEO_CATEGORIES: VideoCategory[] = [
     id: 'motion_deblur',
     label: 'Motion Deblur',
     desc: 'Synthesize crisp frames by reversing high-speed action and camera shake.',
-    file: 'motion_deblur.webp',
+    file: 'motion_deblur.mp4',
     iconName: 'Zap',
   },
   {
