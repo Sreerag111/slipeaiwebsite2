@@ -6,9 +6,16 @@ import {
   Mic,
   Volume2,
   Sliders,
+  Sparkles,
+  ArrowRight,
+  ImagePlay,
 } from 'lucide-react';
 
-export function AudioEnhanceSection() {
+interface AudioEnhanceSectionProps {
+  onExploreGif?: () => void;
+}
+
+export function AudioEnhanceSection({ onExploreGif }: AudioEnhanceSectionProps) {
   const previewFeatures = [
     {
       title: 'Vocal Isolation & Speech Clarity',
@@ -80,6 +87,35 @@ export function AudioEnhanceSection() {
               </div>
             );
           })}
+        </div>
+
+        {/* AI GIF Studio Feature Banner Below Audio Enhance */}
+        <div className="rounded-[28px] sm:rounded-[32px] bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 p-6 sm:p-8 md:p-10 text-white shadow-xl border border-slate-800/80 font-display relative overflow-hidden">
+          <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="space-y-2.5 max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 text-xs font-bold uppercase tracking-wider">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>New AI Feature Available</span>
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                AI GIF Studio
+              </h3>
+              <p className="text-sm sm:text-base text-slate-300 font-medium leading-relaxed">
+                Turn your still photos and creative text prompts into smooth, looped animated GIFs with identity preservation and cinematic camera motion.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={onExploreGif || (() => { window.location.href = '/?tab=gif'; })}
+              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-white text-slate-950 hover:bg-slate-100 font-bold text-sm shadow-md transition-all active:scale-95 shrink-0 cursor-pointer group"
+            >
+              <ImagePlay className="w-4 h-4 text-indigo-600" />
+              <span>Launch AI GIF Studio</span>
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </button>
+          </div>
         </div>
       </div>
     </section>

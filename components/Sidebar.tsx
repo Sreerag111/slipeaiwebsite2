@@ -12,6 +12,7 @@ import {
   Search,
   PanelLeftClose,
   AudioWaveform,
+  ImagePlay,
 } from 'lucide-react';
 import { AboutModal } from '@/components/AboutModal';
 
@@ -22,7 +23,7 @@ interface SidebarProps {
   onToggleCollapse?: () => void;
   onExpand?: () => void;
   onOpenPricing: () => void;
-  activeItem?: 'create' | 'enhance' | 'video' | 'audio' | string;
+  activeItem?: 'create' | 'enhance' | 'video' | 'audio' | 'gif' | string;
   onSelectSection?: (sectionId: string) => void;
 }
 
@@ -99,6 +100,13 @@ export function Sidebar({
       icon: AudioWaveform,
       isCurrent: activeItem === 'audio',
       action: () => handleNavClick('audio'),
+    },
+    {
+      id: 'gif',
+      label: 'AI GIF Studio',
+      icon: ImagePlay,
+      isCurrent: activeItem === 'gif',
+      action: () => handleNavClick('gif'),
     },
   ];
 
