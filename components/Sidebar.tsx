@@ -20,6 +20,7 @@ interface SidebarProps {
   isCollapsed?: boolean;
   onClose: () => void;
   onToggleCollapse?: () => void;
+  onExpand?: () => void;
   onOpenPricing: () => void;
   activeItem?: 'create' | 'enhance' | 'video' | 'audio' | string;
   onSelectSection?: (sectionId: string) => void;
@@ -30,6 +31,7 @@ export function Sidebar({
   isCollapsed = false,
   onClose,
   onToggleCollapse,
+  onExpand,
   onOpenPricing,
   activeItem = 'create',
   onSelectSection,
@@ -57,6 +59,15 @@ export function Sidebar({
         window.location.href = `/?tab=${sectionId}`;
       }
     }
+  };
+
+  const handleRailIconClick = (sectionId: string) => {
+    if (onExpand) {
+      onExpand();
+    } else if (onToggleCollapse && isCollapsed) {
+      onToggleCollapse();
+    }
+    handleNavClick(sectionId);
   };
 
   const navItems = [
@@ -117,7 +128,8 @@ export function Sidebar({
               <button
                 type="button"
                 onClick={() => {
-                  if (onToggleCollapse) onToggleCollapse();
+                  if (onExpand) onExpand();
+                  else if (onToggleCollapse) onToggleCollapse();
                 }}
                 className="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-900 flex items-center justify-center p-1.5 transition-all shadow-2xs cursor-pointer group relative"
                 title="Expand Sidebar (SlipeAI)"
@@ -143,10 +155,10 @@ export function Sidebar({
                     <button
                       key={item.id}
                       type="button"
-                      onClick={item.action}
+                      onClick={() => handleRailIconClick(item.id)}
                       className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all cursor-pointer relative group ${
                         item.isCurrent
-                          ? 'bg-slate-950 text-white shadow-sm'
+                          ? 'bg-slate-100 text-slate-950 shadow-xs border border-slate-200/80 font-bold'
                           : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100'
                       }`}
                       title={`${item.label}${item.suffix ? ' ' + item.suffix : ''}`}
@@ -154,7 +166,7 @@ export function Sidebar({
                     >
                       <Icon
                         className={`w-4.5 h-4.5 shrink-0 ${
-                          item.isCurrent ? 'text-white' : 'text-slate-600 group-hover:text-slate-950'
+                          item.isCurrent ? 'text-slate-950' : 'text-slate-600 group-hover:text-slate-950'
                         }`}
                       />
 
@@ -195,7 +207,11 @@ export function Sidebar({
               {/* Free Plan / Upgrade Shield */}
               <button
                 type="button"
-                onClick={onOpenPricing}
+                onClick={() => {
+                  if (onExpand) onExpand();
+                  else if (onToggleCollapse) onToggleCollapse();
+                  onOpenPricing();
+                }}
                 className="w-10 h-10 rounded-xl flex items-center justify-center text-slate-600 hover:text-slate-950 hover:bg-slate-100 transition-all relative group cursor-pointer"
                 title="Upgrade Plan"
                 aria-label="Upgrade Plan"
@@ -211,7 +227,11 @@ export function Sidebar({
               {/* Green circular avatar with S (matching chat.v2.aifiesta.ai style) */}
               <button
                 type="button"
-                onClick={() => setIsAboutOpen(true)}
+                onClick={() => {
+                  if (onExpand) onExpand();
+                  else if (onToggleCollapse) onToggleCollapse();
+                  setIsAboutOpen(true);
+                }}
                 className="w-9 h-9 rounded-full bg-emerald-600 text-white font-black text-xs flex items-center justify-center shadow-xs cursor-pointer hover:ring-2 hover:ring-emerald-400 hover:ring-offset-2 transition-all relative group"
                 title="Sreerag Jotish (Free Plan)"
                 aria-label="About & Profile"
@@ -234,9 +254,14 @@ export function Sidebar({
               <button
                 type="button"
                 onClick={() => handleNavClick('create')}
-                className="flex items-center gap-2 group text-left cursor-pointer"
+                className="flex items-center gap-2.5 group text-left cursor-pointer"
               >
-                <span className="text-2xl font-black tracking-tight text-slate-950 group-hover:text-slate-700 transition-colors">
+                <img
+                  src="/slipe-logo.png"
+                  alt="SlipeAI"
+                  className="w-6 h-6 object-contain rounded"
+                />
+                <span className="text-xl font-black tracking-tight text-slate-950 group-hover:text-slate-700 transition-colors">
                   SlipeAI
                 </span>
               </button>
@@ -288,18 +313,18 @@ export function Sidebar({
                     onClick={item.action}
                     className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs sm:text-[13px] font-bold transition-all text-left cursor-pointer ${
                       item.isCurrent
-                        ? 'bg-slate-950 text-white shadow-sm'
-                        : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/80'
+                        ? 'bg-slate-100 text-slate-950 shadow-xs border border-slate-200/80 font-bold'
+                        : 'text-slate-600 hover:text-slate-950 hover:bg-slate-100/70 font-medium'
                     }`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
-                      <Icon className={`w-4 h-4 shrink-0 ${item.isCurrent ? 'text-white' : 'text-slate-500'}`} />
+                      <Icon className={`w-4 h-4 shrink-0 ${item.isCurrent ? 'text-slate-950' : 'text-slate-500'}`} />
                       <span className="truncate">
                         {item.label}
                         {item.suffix && (
                           <span
                             className={`ml-1 text-[11px] font-medium tracking-normal ${
-                              item.isCurrent ? 'text-white/80' : 'text-slate-400'
+                              item.isCurrent ? 'text-slate-500' : 'text-slate-400'
                             }`}
                           >
                             {item.suffix}

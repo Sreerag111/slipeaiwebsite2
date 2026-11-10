@@ -48,6 +48,13 @@ export default function EnhancePage() {
     });
   };
 
+  const handleExpandDesktopSidebar = () => {
+    setIsDesktopSidebarCollapsed(false);
+    try {
+      localStorage.setItem('slipeai_sidebar_collapsed', 'false');
+    } catch {}
+  };
+
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-900 selection:bg-slate-900 selection:text-white flex">
       {/* Sidebar */}
@@ -56,6 +63,7 @@ export default function EnhancePage() {
         isCollapsed={isDesktopSidebarCollapsed}
         onClose={() => setIsMobileSidebarOpen(false)}
         onToggleCollapse={handleToggleDesktopCollapse}
+        onExpand={handleExpandDesktopSidebar}
         onOpenPricing={() => setIsPricingOpen(true)}
         activeItem="enhance"
       />

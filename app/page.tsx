@@ -69,6 +69,13 @@ function HomeContent() {
     });
   };
 
+  const handleExpandDesktopSidebar = () => {
+    setIsDesktopSidebarCollapsed(false);
+    try {
+      localStorage.setItem('slipeai_sidebar_collapsed', 'false');
+    } catch {}
+  };
+
   const handleSelectSection = (sectionId: string) => {
     if (sectionId === 'enhance' || sectionId === 'enhancer') {
       setActiveTab('enhance');
@@ -89,6 +96,7 @@ function HomeContent() {
         isCollapsed={isDesktopSidebarCollapsed}
         onClose={() => setIsMobileSidebarOpen(false)}
         onToggleCollapse={handleToggleDesktopCollapse}
+        onExpand={handleExpandDesktopSidebar}
         onOpenPricing={() => setIsPricingOpen(true)}
         activeItem={activeTab}
         onSelectSection={handleSelectSection}
